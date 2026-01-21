@@ -13,7 +13,8 @@
     <header>
         <!-- top banner -->
         <div class="top-banner">
-            <p>LAUNCH SALE | Flat 10% off | Promo Code: V10 | Offer Ends In: <span class="countdown">02H 00M 00S</span></p>
+            <p>LAUNCH SALE | Flat 10% off | Promo Code: V10 | Offer Ends In: <span class="countdown">02H 00M 00S</span>
+            </p>
         </div>
     </header>
 
@@ -25,7 +26,7 @@
         <ul class="navbar">
             <li><a href="#home">HOME</a></li>
             <li class="collections-menu">
-                <a href="#collections">COLLECTIONS</a>
+                <a href="#collections">COLLECTIONS <i class="fa-solid fa-angle-down"></i></a>
                 <div class="dropdown-menu">
                     <a href="#all" class="dropdown-item">
                         <i class="fa-solid fa-border-all"></i>
@@ -36,7 +37,7 @@
                         <span>Tote Bag</span>
                     </a>
                     <a href="#shoulder" class="dropdown-item">
-                        <i class="fa-solid fa-person-hiking"></i>
+                        <i class="fa-solid fa-hourglass"></i>
                         <span>Shoulder Bag</span>
                     </a>
                     <a href="#hand" class="dropdown-item">
@@ -44,7 +45,7 @@
                         <span>Hand Bag</span>
                     </a>
                     <a href="#crossbody" class="dropdown-item">
-                        <i class="fa-solid fa-satchel"></i>
+                        <i class="fa-solid fa-briefcase"></i>
                         <span>Cross Body Bag</span>
                     </a>
                     <a href="#accessories" class="dropdown-item">
@@ -52,7 +53,7 @@
                         <span>Accessories</span>
                     </a>
                     <a href="#pouches" class="dropdown-item">
-                        <i class="fa-solid fa-rectangle"></i>
+                        <i class="fa-solid fa-cube"></i>
                         <span>Pouches</span>
                     </a>
                 </div>
@@ -127,204 +128,123 @@
             <p>Discover our latest and most popular collections</p>
         </div>
 
-        <!-- Tote Bags -->
-        <div class="product-category">
-            <h3><i class="fa-solid fa-bag-shopping"></i> Tote Bags</h3>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/tote.jpeg" alt="Classic Tote">
-                    </div>
-                    <h4>Classic Tote</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/tote (2).jpeg" alt="Modern Tote">
-                    </div>
-                    <h4>Modern Tote</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/tote (4).jpeg" alt="Premium Tote">
-                    </div>
-                    <h4>Premium Tote</h4>
-                </div>
+        <!-- Featured Slider (New) -->
+        <div class="featured-slider-wrapper">
+            <div class="featured-slider" id="featured-slider">
+                <!-- Dynamic Slider Content -->
             </div>
+            <button class="slider-btn prev-btn" id="slider-prev"><i class="fa-solid fa-angle-left"></i></button>
+            <button class="slider-btn next-btn" id="slider-next"><i class="fa-solid fa-angle-right"></i></button>
         </div>
 
-        <!-- Shoulder Bags -->
-        <div class="product-category">
-            <h3><i class="fa-solid fa-person-hiking"></i> Shoulder Bags</h3>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/shoulder.jpeg" alt="Elegant Shoulder">
-                    </div>
-                    <h4>Elegant Shoulder</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/shoulder (2).jpeg" alt="Casual Shoulder">
-                    </div>
-                    <h4>Casual Shoulder</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/shoulder (4).jpeg" alt="Designer Shoulder">
-                    </div>
-                    <h4>Designer Shoulder</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/shoulder (5).jpeg" alt="Trendy Shoulder">
-                    </div>
-                    <h4>Trendy Shoulder</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/shoulder (6).jpeg" alt="Luxury Shoulder">
-                    </div>
-                    <h4>Luxury Shoulder</h4>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hand Bags -->
-        <div class="product-category">
-            <h3><i class="fa-solid fa-hand"></i> Hand Bags</h3>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/hand.jpeg" alt="Classic Hand">
-                    </div>
-                    <h4>Classic Hand</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/hand (2).jpeg" alt="Stylish Hand">
-                    </div>
-                    <h4>Stylish Hand</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/hand (3).jpeg" alt="Modern Hand">
-                    </div>
-                    <h4>Modern Hand</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/hand (4).jpeg" alt="Elegant Hand">
-                    </div>
-                    <h4>Elegant Hand</h4>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cross Body Bags -->
-        <div class="product-category">
-            <h3><i class="fa-solid fa-satchel"></i> Cross Body Bags</h3>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/cross body.jpeg" alt="Adventure Cross Body">
-                    </div>
-                    <h4>Adventure Cross Body</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/cross body (2).jpeg" alt="Urban Cross Body">
-                    </div>
-                    <h4>Urban Cross Body</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/cross body (3).jpeg" alt="Travel Cross Body">
-                    </div>
-                    <h4>Travel Cross Body</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/cross body (4).jpeg" alt="Casual Cross Body">
-                    </div>
-                    <h4>Casual Cross Body</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/cross body (5).jpeg" alt="Premium Cross Body">
-                    </div>
-                    <h4>Premium Cross Body</h4>
-                </div>
-            </div>
-        </div>
-
-        <!-- Accessories -->
-        <div class="product-category">
-            <h3><i class="fa-solid fa-ring"></i> Accessories</h3>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/accessories.jpeg" alt="Gold Accessory">
-                    </div>
-                    <h4>Gold Accessory</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/accessories (1).jpeg" alt="Silver Accessory">
-                    </div>
-                    <h4>Silver Accessory</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/accessories (2).jpeg" alt="Leather Accessory">
-                    </div>
-                    <h4>Leather Accessory</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/accessories (3).jpeg" alt="Charm Set">
-                    </div>
-                    <h4>Charm Set</h4>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pouches -->
-        <div class="product-category">
-            <h3><i class="fa-solid fa-rectangle"></i> Pouches</h3>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/pouches.jpeg" alt="Compact Pouch">
-                    </div>
-                    <h4>Compact Pouch</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/pouches (2).jpeg" alt="Travel Pouch">
-                    </div>
-                    <h4>Travel Pouch</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/pouches (3).jpeg" alt="Luxury Pouch">
-                    </div>
-                    <h4>Luxury Pouch</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/pouches (4).jpeg" alt="Everyday Pouch">
-                    </div>
-                    <h4>Everyday Pouch</h4>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="img/pouches (5).jpeg" alt="Premium Pouch">
-                    </div>
-                    <h4>Premium Pouch</h4>
-                </div>
-            </div>
+        <!-- Dynamic Categories Container -->
+        <div id="dynamic-categories-container">
+            <!-- Categories will be injected here via JS -->
         </div>
     </section>
+
+    <!-- Admin Portal Slide-in Panel -->
+    <div class="admin-portal" id="admin-portal">
+        <div class="admin-header">
+            <h2>Admin Dashboard</h2>
+            <button id="admin-close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="admin-content">
+            <div class="admin-section">
+                <h3>Add New Product</h3>
+                <form id="add-product-form">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" id="prod-name" placeholder="e.g. Classic Tote" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price ($)</label>
+                        <input type="number" id="prod-price" placeholder="e.g. 50" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="prod-category" required>
+                            <option value="tote">Tote Bags</option>
+                            <option value="shoulder">Shoulder Bags</option>
+                            <option value="hand">Hand Bags</option>
+                            <option value="crossbody">Cross Body Bags</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="pouches">Pouches</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="prod-desc" rows="3" placeholder="Product details..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Image</label>
+                        <input type="file" id="prod-image-input" accept="image/*" required>
+                        <div id="image-preview" class="image-preview-box">
+                            <span>No Image Selected</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn admin-btn">Add Product</button>
+                </form>
+            </div>
+
+            <button type="submit" class="btn admin-btn">Add Product</button>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h3>Manage Categories</h3>
+            <form id="add-category-form">
+                <div class="form-group">
+                    <label>Category Name</label>
+                    <input type="text" id="cat-name-input" placeholder="e.g. Travel Bags" required>
+                </div>
+                <div class="form-group">
+                    <label>Icon Class (FontAwesome)</label>
+                    <input type="text" id="cat-icon-input" placeholder="e.g. fa-solid fa-plane" required>
+                </div>
+                <button type="submit" class="btn admin-btn">Add Category</button>
+            </form>
+            <div class="admin-cart-view" id="admin-category-list" style="margin-top: 15px;">
+                <!-- List of categories to delete -->
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h3>Manage Products</h3>
+            <div class="admin-cart-view" id="admin-product-list">
+                <!-- List of products to delete -->
+            </div>
+        </div>
+        <div class="admin-actions">
+            <button id="admin-logout-btn" class="btn logout-btn">Logout</button>
+        </div>
+    </div>
+    </div>
+
+    <!-- Admin Float Button (Hidden by default, shown for admin) -->
+    <button id="admin-toggle-float" class="admin-float-btn" style="display: none;">
+        <i class="fa-solid fa-gear"></i>
+    </button>
+
+    <!-- Shopping Cart Slide-in Panel -->
+    <div class="cart-panel" id="cart-panel">
+        <div class="cart-header">
+            <h2>Shopping Cart</h2>
+            <button id="cart-close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-content" id="cart-items-container">
+            <!-- Cart Items will be injected here -->
+            <p class="empty-cart-msg">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-amount">Rs. 0</span>
+            </div>
+            <button class="btn checkout-btn">Checkout</button>
+            <button id="cart-admin-login-btn" class="admin-link-btn">Admin Login</button>
+        </div>
+    </div>
 
     <!-- Authentication Modal -->
     <div class="auth-modal" id="auth-modal">
@@ -347,7 +267,8 @@
                     </div>
                     <button type="submit" class="auth-btn">Sign In</button>
                 </form>
-                <p class="auth-toggle">Don't have an account? <a href="#" onclick="toggleAuthForm(event)">Sign Up</a></p>
+                <p class="auth-toggle">Don't have an account? <a href="#" onclick="toggleAuthForm(event)">Sign Up</a>
+                </p>
             </div>
 
             <!-- Sign Up Form -->
@@ -372,12 +293,43 @@
                     </div>
                     <button type="submit" class="auth-btn">Sign Up</button>
                 </form>
-                <p class="auth-toggle">Already have an account? <a href="#" onclick="toggleAuthForm(event)">Sign In</a></p>
+                <p class="auth-toggle">Already have an account? <a href="#" onclick="toggleAuthForm(event)">Sign In</a>
+                </p>
             </div>
         </div>
     </div>
 
-    <footer>
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <h3>Useful Links</h3>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Marquise Vault. All rights reserved.</p>
+        </div>
+    </footer>
+
     <div class="whatsapp-container">
         <a href="https://wa.me/+923243499882" class="whatsapp-btn">
             <i class="fa-brands fa-whatsapp"></i>
