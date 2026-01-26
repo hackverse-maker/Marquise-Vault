@@ -85,10 +85,18 @@
     </div>
 
     <!-- Admin Portal Slide-in Panel -->
+    <div class="admin-sidebar-entry" id="admin-sidebar-entry">
+        <span>Admin Portal</span>
+    </div>
+
     <div class="admin-portal" id="admin-portal">
         <div class="admin-header">
             <h2>Admin CMS</h2>
-            <button id="admin-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="header-actions">
+                <button id="admin-logout-btn" class="btn logout-btn-header" title="Logout"><i
+                        class="fa-solid fa-right-from-bracket"></i></button>
+                <button id="admin-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
         </div>
 
         <!-- Admin Navigation Tabs -->
@@ -96,6 +104,7 @@
             <button class="admin-tab-btn active" data-tab="layout">Layout</button>
             <button class="admin-tab-btn" data-tab="products">Products</button>
             <button class="admin-tab-btn" data-tab="categories">Categories</button>
+            <button class="admin-tab-btn" data-tab="settings">Settings</button>
         </div>
 
         <div class="admin-content">
@@ -178,16 +187,35 @@
                 </div>
             </div>
 
+            <!-- SETTINGS TAB -->
+            <div id="tab-settings" class="admin-tab-content">
+                <div class="admin-section">
+                    <h3>Admin Settings</h3>
+                    <form id="admin-settings-form">
+                        <div class="form-group">
+                            <label>Admin Email</label>
+                            <input type="email" id="admin-email-input" placeholder="admin@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" id="admin-pass-input" placeholder="New Password">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="admin-confirm-pass-input" placeholder="Confirm Password">
+                        </div>
+                        <button type="submit" class="btn admin-btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
             <div class="admin-actions">
-                <button id="admin-logout-btn" class="btn logout-btn">Logout</button>
+                <!-- Logout moved to header -->
             </div>
         </div>
     </div>
 
-    <!-- Admin Float Button (Hidden by default, shown for admin) -->
-    <button id="admin-toggle-float" class="admin-float-btn" style="display: none;">
-        <i class="fa-solid fa-gear"></i>
-    </button>
+    <!-- Admin Float Button REMOVED -->
 
     <!-- Shopping Cart Slide-in Panel -->
     <div class="cart-panel" id="cart-panel">

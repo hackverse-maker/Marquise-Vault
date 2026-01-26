@@ -1419,3 +1419,68 @@ header {
         /* Space for scroll */
     }
 }
+
+/* --- Admin Sidebar Entry --- */
+.admin-sidebar-entry {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    padding: 25px 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    cursor: pointer;
+    z-index: 2900;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-sidebar-entry:hover {
+    background-color: var(--main-color);
+    padding-left: 15px;
+    box-shadow: 4px 0 15px rgba(255, 109, 70, 0.4);
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logout-btn-header {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-btn-header:hover {
+    background-color: white;
+    color: var(--main-color);
+    transform: scale(1.1);
+}
+
+/* Admin Settings Form */
+#tab-settings .admin-section {
+    border-top: 4px solid var(--main-color);
+}

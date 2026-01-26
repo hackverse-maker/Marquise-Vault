@@ -65,6 +65,7 @@ let storedVersion = localStorage.getItem('configVersion');
 let products = JSON.parse(localStorage.getItem('products')) || DEFAULT_PRODUCTS;
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let isAdmin = localStorage.getItem('isAdmin') === 'true';
+let adminCreds = JSON.parse(localStorage.getItem('adminCreds')) || { email: 'admin@marquise.com', pass: 'admin123' };
 let pageLayout = JSON.parse(localStorage.getItem('pageLayout')) || DEFAULT_LAYOUT;
 let heroSlides = JSON.parse(localStorage.getItem('heroSlides')) || DEFAULT_HERO_SLIDES;
 
@@ -473,29 +474,42 @@ function updateCartCount() {
 // --- Admin Logic ---
 
 const adminPortal = document.getElementById('admin-portal');
-const toggleBtn = document.getElementById('admin-toggle-float');
+const sidebarEntry = document.getElementById('admin-sidebar-entry');
 const closeAdminBtn = document.getElementById('admin-close-btn');
 
 function updateAdminUI() {
+    // Determine visibility or state of admin elements
     if (isAdmin) {
-        toggleBtn.style.display = 'flex';
-        const loginBtn = document.getElementById('cart-admin-login-btn');
-        if (loginBtn) loginBtn.style.display = 'none';
-
-        // Render Layout List in Admin
+        // Prepare lists
         renderAdminLayoutList();
         renderAdminProductList();
         renderAdminCategoryList();
 
+        // Pre-fill settings
+        const mailInput = document.getElementById('admin-email-input');
+        if (mailInput) mailInput.value = adminCreds.email;
+
     } else {
-        toggleBtn.style.display = 'none';
         adminPortal.classList.remove('active');
-        const loginBtn = document.getElementById('cart-admin-login-btn');
-        if (loginBtn) loginBtn.style.display = 'block';
     }
 }
 
-if (toggleBtn) toggleBtn.addEventListener('click', () => adminPortal.classList.add('active'));
+if (sidebarEntry) {
+    sidebarEntry.addEventListener('click', () => {
+        if (isAdmin) {
+            adminPortal.classList.add('active');
+        } else {
+            // Show Login
+            const authModal = document.getElementById('auth-modal');
+            if (authModal) {
+                authModal.classList.add('active');
+                // Ensure signin is shown
+                document.getElementById('signin-form').classList.add('active');
+                document.getElementById('signup-form').classList.remove('active');
+            }
+        }
+    });
+}
 if (closeAdminBtn) closeAdminBtn.addEventListener('click', () => adminPortal.classList.remove('active'));
 
 // Admin Tabs Logic
@@ -824,16 +838,39 @@ if (signinFormEl) {
         const email = document.getElementById('signin-email').value;
         const password = document.getElementById('signin-password').value;
 
-        if (email === 'admin@marquise.com' && password === 'admin123') {
+        if (email === adminCreds.email && password === adminCreds.pass) {
             isAdmin = true;
             localStorage.setItem('isAdmin', 'true');
             authModal.classList.remove('active');
             updateAdminUI();
+            adminPortal.classList.add('active'); // Auto open
             alert("Welcome Admin");
         } else {
-            alert("Logged in as User");
-            authModal.classList.remove('active');
+            alert("Invalid Credentials (Try: " + adminCreds.email + ")");
         }
+    });
+}
+
+// Settings Form
+const settingsForm = document.getElementById('admin-settings-form');
+if (settingsForm) {
+    settingsForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('admin-email-input').value;
+        const pass = document.getElementById('admin-pass-input').value;
+        const confirm = document.getElementById('admin-confirm-pass-input').value;
+
+        if (email) adminCreds.email = email;
+        if (pass) {
+            if (pass !== confirm) {
+                alert("Passwords do not match");
+                return;
+            }
+            adminCreds.pass = pass;
+        }
+
+        localStorage.setItem('adminCreds', JSON.stringify(adminCreds));
+        alert("Admin Profile Updated");
     });
 }
 
