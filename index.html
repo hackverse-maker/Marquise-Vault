@@ -79,146 +79,109 @@
         </div>
     </nav>
 
-    <!-- home  -->
-    <section class="home" id="home">
-        <div class="home-text">
-            <h3>Fashion Bag</h3>
-            <h1>Look <span>Stylish </span> <br><span> Be </span>Stylish</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem iste quos, qui incidunt minima saepe.</p>
-            <a href="#" class="btn">Shop Now</a>
-        </div>
-        <!-- hero slider -->
-        <div class="hero-slider">
-            <div class="slider-container">
-                <div class="slide active">
-                    <img src="img/hero.jpeg" alt="Premium Collection">
-                    <div class="slide-text">Premium Collection</div>
-                </div>
-                <div class="slide">
-                    <img src="img/hero (1).jpeg" alt="Elegant Designs">
-                    <div class="slide-text">Elegant Designs</div>
-                </div>
-                <div class="slide">
-                    <img src="img/hero (2).jpeg" alt="Luxury Bags">
-                    <div class="slide-text">Luxury Bags</div>
-                </div>
-                <div class="slide">
-                    <img src="img/hero (3).jpeg" alt="Summer Collection">
-                    <div class="slide-text">Summer Collection</div>
-                </div>
-                <div class="slide">
-                    <img src="img/hero (4).jpeg" alt="Style & Comfort">
-                    <div class="slide-text">Style & Comfort</div>
-                </div>
-            </div>
-            <!-- <div class="slider-indicators">
-                <span class="indicator active" onclick="currentSlide(0)"></span>
-                <span class="indicator" onclick="currentSlide(1)"></span>
-                <span class="indicator" onclick="currentSlide(2)"></span>
-                <span class="indicator" onclick="currentSlide(3)"></span>
-                <span class="indicator" onclick="currentSlide(4)"></span>
-            </div> -->
-        </div>
-    </section>
-
-    <!-- Featured Products Section -->
-    <section class="featured-products" id="featured">
-        <div class="section-header">
-            <h2>Featured Products</h2>
-            <p>Discover our latest and most popular collections</p>
-        </div>
-
-        <!-- Featured Slider (New) -->
-        <div class="featured-slider-wrapper">
-            <div class="featured-slider" id="featured-slider">
-                <!-- Dynamic Slider Content -->
-            </div>
-            <button class="slider-btn prev-btn" id="slider-prev"><i class="fa-solid fa-angle-left"></i></button>
-            <button class="slider-btn next-btn" id="slider-next"><i class="fa-solid fa-angle-right"></i></button>
-        </div>
-
-        <!-- Dynamic Categories Container -->
-        <div id="dynamic-categories-container">
-            <!-- Categories will be injected here via JS -->
-        </div>
-    </section>
+    <!-- Dynamic Main Content Container -->
+    <div id="main-content">
+        <!-- Sections will be rendered here by main.js -->
+    </div>
 
     <!-- Admin Portal Slide-in Panel -->
     <div class="admin-portal" id="admin-portal">
         <div class="admin-header">
-            <h2>Admin Dashboard</h2>
+            <h2>Admin CMS</h2>
             <button id="admin-close-btn"><i class="fa-solid fa-xmark"></i></button>
         </div>
+
+        <!-- Admin Navigation Tabs -->
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" data-tab="layout">Layout</button>
+            <button class="admin-tab-btn" data-tab="products">Products</button>
+            <button class="admin-tab-btn" data-tab="categories">Categories</button>
+        </div>
+
         <div class="admin-content">
-            <div class="admin-section">
-                <h3>Add New Product</h3>
-                <form id="add-product-form">
-                    <div class="form-group">
-                        <label>Product Name</label>
-                        <input type="text" id="prod-name" placeholder="e.g. Classic Tote" required>
+
+            <!-- LAYOUT MANAGER TAB -->
+            <div id="tab-layout" class="admin-tab-content active">
+                <div class="admin-section">
+                    <h3>Page Sections</h3>
+                    <div id="admin-section-list" class="admin-list">
+                        <!-- Draggable/Sortable Sections List -->
                     </div>
-                    <div class="form-group">
-                        <label>Price ($)</label>
-                        <input type="number" id="prod-price" placeholder="e.g. 50" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select id="prod-category" required>
-                            <option value="tote">Tote Bags</option>
-                            <option value="shoulder">Shoulder Bags</option>
-                            <option value="hand">Hand Bags</option>
-                            <option value="crossbody">Cross Body Bags</option>
-                            <option value="accessories">Accessories</option>
-                            <option value="pouches">Pouches</option>
+                    <div class="add-section-controls">
+                        <select id="new-section-type">
+                            <option value="banner">Banner Image</option>
+                            <option value="slider">Image Slider</option>
+                            <option value="text">Text Block</option>
                         </select>
+                        <button class="btn admin-btn small-btn" id="btn-add-section">Add Section</button>
                     </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="prod-desc" rows="3" placeholder="Product details..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Product Image</label>
-                        <input type="file" id="prod-image-input" accept="image/*" required>
-                        <div id="image-preview" class="image-preview-box">
-                            <span>No Image Selected</span>
+                </div>
+            </div>
+
+            <!-- PRODUCT MANAGER TAB -->
+            <div id="tab-products" class="admin-tab-content">
+                <div class="admin-section">
+                    <h3>Add New Product</h3>
+                    <form id="add-product-form">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" id="prod-name" placeholder="Name" required>
                         </div>
+                        <div class="form-group">
+                            <label>Price ($)</label>
+                            <input type="number" id="prod-price" placeholder="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="prod-category" required>
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" id="prod-image-input" accept="image/*" required>
+                            <div id="image-preview" class="image-preview-box"><span>No Image</span></div>
+                        </div>
+                        <button type="submit" class="btn admin-btn">Add Product</button>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Manage Products</h3>
+                    <input type="text" id="admin-prod-search" placeholder="Search products..."
+                        style="width:100%; padding:8px; margin-bottom:10px;">
+                    <div class="admin-cart-view" id="admin-product-list">
+                        <!-- List of products -->
                     </div>
-                    <button type="submit" class="btn admin-btn">Add Product</button>
-                </form>
-            </div>
-
-            <button type="submit" class="btn admin-btn">Add Product</button>
-            </form>
-        </div>
-
-        <div class="admin-section">
-            <h3>Manage Categories</h3>
-            <form id="add-category-form">
-                <div class="form-group">
-                    <label>Category Name</label>
-                    <input type="text" id="cat-name-input" placeholder="e.g. Travel Bags" required>
                 </div>
-                <div class="form-group">
-                    <label>Icon Class (FontAwesome)</label>
-                    <input type="text" id="cat-icon-input" placeholder="e.g. fa-solid fa-plane" required>
-                </div>
-                <button type="submit" class="btn admin-btn">Add Category</button>
-            </form>
-            <div class="admin-cart-view" id="admin-category-list" style="margin-top: 15px;">
-                <!-- List of categories to delete -->
             </div>
-        </div>
 
-        <div class="admin-section">
-            <h3>Manage Products</h3>
-            <div class="admin-cart-view" id="admin-product-list">
-                <!-- List of products to delete -->
+            <!-- CATEGORY MANAGER TAB -->
+            <div id="tab-categories" class="admin-tab-content">
+                <div class="admin-section">
+                    <h3>Add Category</h3>
+                    <form id="add-category-form">
+                        <div class="form-group">
+                            <input type="text" id="cat-name-input" placeholder="Category Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="cat-icon-input" placeholder="fa-solid fa-icon" required>
+                        </div>
+                        <button type="submit" class="btn admin-btn">Add Category</button>
+                    </form>
+                </div>
+                <div class="admin-section">
+                    <h3>Existing Categories</h3>
+                    <div class="admin-cart-view" id="admin-category-list">
+                        <!-- List of categories -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-actions">
+                <button id="admin-logout-btn" class="btn logout-btn">Logout</button>
             </div>
         </div>
-        <div class="admin-actions">
-            <button id="admin-logout-btn" class="btn logout-btn">Logout</button>
-        </div>
-    </div>
     </div>
 
     <!-- Admin Float Button (Hidden by default, shown for admin) -->
@@ -295,6 +258,24 @@
                 </form>
                 <p class="auth-toggle">Already have an account? <a href="#" onclick="toggleAuthForm(event)">Sign In</a>
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Edit Modal -->
+    <div class="auth-modal" id="edit-section-modal">
+        <div class="auth-modal-content" style="max-width: 600px;">
+            <button class="auth-modal-close" id="edit-section-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="auth-form active" id="edit-section-form-container">
+                <h2 id="edit-modal-title">Edit Section</h2>
+                <form id="edit-section-form">
+                    <div id="edit-section-dynamic-inputs">
+                        <!-- Dynamic inputs based on section type -->
+                    </div>
+                    <button type="submit" class="auth-btn">Save Changes</button>
+                </form>
             </div>
         </div>
     </div>
