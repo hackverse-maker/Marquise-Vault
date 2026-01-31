@@ -7,6 +7,7 @@
     <title>Document</title>
     <script src="https://kit.fontawesome.com/c6bd8840ab.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin_dashboard.css">
 </head>
 
 <body>
@@ -89,130 +90,276 @@
         <span>Admin Portal</span>
     </div>
 
-    <div class="admin-portal" id="admin-portal">
-        <div class="admin-header">
-            <h2>Admin CMS</h2>
-            <div class="header-actions">
-                <button id="admin-logout-btn" class="btn logout-btn-header" title="Logout"><i
-                        class="fa-solid fa-right-from-bracket"></i></button>
-                <button id="admin-close-btn"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Professional Admin Dashboard Container -->
+    <div class="admin-dashboard-container" id="admin-dashboard-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                MARQUISE <span>ADMIN</span>
             </div>
-        </div>
+            <div class="admin-nav">
+                <div class="admin-nav-item active" onclick="switchAdminModule('dashboard')">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminModule('products')">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>Products</span>
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminModule('categories')">
+                    <i class="fa-solid fa-tags"></i>
+                    <span>Categories</span>
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminModule('hero')">
+                    <i class="fa-solid fa-images"></i>
+                    <span>Hero Section</span>
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminModule('layout')">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Layout Manager</span>
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminModule('orders')">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Orders</span>
+                </div>
+                <div class="admin-nav-item" onclick="switchAdminModule('settings')">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+            <div class="admin-user-profile">
+                <div class="admin-avatar">A</div>
+                <div class="admin-user-info">
+                    <div class="admin-user-name">Admin User</div>
+                    <div class="admin-user-role">Super Admin</div>
+                </div>
+                <button id="new-admin-logout" class="admin-btn-danger"
+                    style="padding: 5px 10px; border-radius: 4px; border:none; cursor:pointer;" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
 
-        <!-- Admin Navigation Tabs -->
-        <div class="admin-tabs">
-            <button class="admin-tab-btn active" data-tab="layout">Layout</button>
-            <button class="admin-tab-btn" data-tab="products">Products</button>
-            <button class="admin-tab-btn" data-tab="categories">Categories</button>
-            <button class="admin-tab-btn" data-tab="settings">Settings</button>
-        </div>
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h2 class="admin-page-title" id="admin-page-title">Dashboard</h2>
+                <button class="admin-close-btn" id="close-admin-dashboard" title="Close Admin Panel">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-        <div class="admin-content">
-
-            <!-- LAYOUT MANAGER TAB -->
-            <div id="tab-layout" class="admin-tab-content active">
-                <div class="admin-section">
-                    <h3>Page Sections</h3>
-                    <div id="admin-section-list" class="admin-list">
-                        <!-- Draggable/Sortable Sections List -->
+            <!-- MODULE: DASHBOARD -->
+            <div id="module-dashboard" class="admin-module active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-total-products">0</h3>
+                            <p>Total Products</p>
+                        </div>
                     </div>
-                    <div class="add-section-controls">
-                        <select id="new-section-type">
-                            <option value="banner">Banner Image</option>
-                            <option value="slider">Image Slider</option>
-                            <option value="text">Text Block</option>
-                        </select>
-                        <button class="btn admin-btn small-btn" id="btn-add-section">Add Section</button>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-tags"></i></div>
+                        <div class="stat-info">
+                            <h3 id="stat-total-categories">0</h3>
+                            <p>Categories</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-info">
+                            <h3>1</h3>
+                            <p>Active Admins</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                        <div class="stat-info">
+                            <h3>0</h3>
+                            <p>Pending Orders</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- PRODUCT MANAGER TAB -->
-            <div id="tab-products" class="admin-tab-content">
-                <div class="admin-section">
-                    <h3>Add New Product</h3>
-                    <form id="add-product-form">
-                        <div class="form-group">
-                            <label>Product Name</label>
-                            <input type="text" id="prod-name" placeholder="Name" required>
+            <!-- MODULE: PRODUCTS -->
+            <div id="module-products" class="admin-module">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Product List</h3>
+                        <button class="admin-btn admin-btn-primary" onclick="toggleAddProductForm()">
+                            <i class="fa-solid fa-plus"></i> Add Product
+                        </button>
+                    </div>
+
+                    <!-- Add Product Form (Hidden by default, toggled) -->
+                    <div id="new-product-form-container"
+                        style="display:none; margin-bottom: 20px; border-bottom: 1px solid #ebedf3; padding-bottom: 20px;">
+                        <form id="new-add-product-form">
+                            <div class="admin-form-group">
+                                <label class="admin-form-label">Product Name</label>
+                                <input type="text" id="new-prod-name" class="admin-form-input" required>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="admin-form-group">
+                                    <label class="admin-form-label">Price ($)</label>
+                                    <input type="number" id="new-prod-price" class="admin-form-input" required>
+                                </div>
+                                <div class="admin-form-group">
+                                    <label class="admin-form-label">Category</label>
+                                    <select id="new-prod-category" class="admin-form-select" required>
+                                        <!-- Dynamic -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="admin-form-group">
+                                <label class="admin-form-label">Product Image</label>
+                                <input type="file" id="new-prod-image" class="admin-form-input" accept="image/*"
+                                    required>
+                            </div>
+                            <button type="submit" class="admin-btn admin-btn-primary">Save Product</button>
+                            <button type="button" class="admin-btn" onclick="toggleAddProductForm()">Cancel</button>
+                        </form>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="new-admin-product-list">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE: CATEGORIES -->
+            <div id="module-categories" class="admin-module">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Manage Categories</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+                        <div>
+                            <form id="new-add-category-form">
+                                <div class="admin-form-group">
+                                    <label class="admin-form-label">Category Name</label>
+                                    <input type="text" id="new-cat-name" class="admin-form-input" required>
+                                </div>
+                                <div class="admin-form-group">
+                                    <label class="admin-form-label">Icon Class (FontAwesome)</label>
+                                    <input type="text" id="new-cat-icon" placeholder="fa-solid fa-bag-shopping"
+                                        class="admin-form-input" required>
+                                </div>
+                                <button type="submit" class="admin-btn admin-btn-primary" style="width:100%">Add
+                                    Category</button>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label>Price ($)</label>
-                            <input type="number" id="prod-price" placeholder="50" required>
+                        <div>
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Icon</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="new-admin-category-list">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select id="prod-category" required>
-                                <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE: HERO SECTION -->
+            <div id="module-hero" class="admin-module">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Hero Slider Management</h3>
+                        <button class="admin-btn admin-btn-primary" onclick="addNewHeroSlide()">
+                            <i class="fa-solid fa-plus"></i> Add Slide
+                        </button>
+                    </div>
+                    <div id="hero-slides-manager-container" style="display: flex; flex-direction: column; gap: 15px;">
+                        <!-- Dynamic Slides -->
+                    </div>
+                    <div style="margin-top: 20px; text-align: right;">
+                        <button class="admin-btn admin-btn-primary" onclick="saveHeroChanges()">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE: LAYOUT MANAGER -->
+            <div id="module-layout" class="admin-module">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Homepage Section Layout</h3>
+                    </div>
+                    <div class="alert"
+                        style="background: #e1f0ff; color: #007bff; padding: 10px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem;">
+                        <i class="fa-solid fa-circle-info"></i> Reorder sections by using the Up/Down arrows.
+                    </div>
+                    <div id="new-layout-list" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Dynamic Layout Items -->
+                    </div>
+
+                    <div class="admin-card"
+                        style="margin-top: 20px; border: 1px dashed var(--admin-border); background: #fafafa;">
+                        <h4 style="margin-bottom: 10px; font-size: 1rem;">Add New Section</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="new-layout-type-select" class="admin-form-select">
+                                <option value="banner">Banner Image</option>
+                                <option value="text">Text Block</option>
+                                <option value="slider">Image Slider</option>
                             </select>
+                            <button class="admin-btn admin-btn-primary" onclick="addNewSectionFromLayout()">Add</button>
                         </div>
-                        <div class="form-group">
-                            <label>Image</label>
-                            <input type="file" id="prod-image-input" accept="image/*" required>
-                            <div id="image-preview" class="image-preview-box"><span>No Image</span></div>
-                        </div>
-                        <button type="submit" class="btn admin-btn">Add Product</button>
-                    </form>
-                </div>
-
-                <div class="admin-section">
-                    <h3>Manage Products</h3>
-                    <input type="text" id="admin-prod-search" placeholder="Search products..."
-                        style="width:100%; padding:8px; margin-bottom:10px;">
-                    <div class="admin-cart-view" id="admin-product-list">
-                        <!-- List of products -->
                     </div>
                 </div>
             </div>
 
-            <!-- CATEGORY MANAGER TAB -->
-            <div id="tab-categories" class="admin-tab-content">
-                <div class="admin-section">
-                    <h3>Add Category</h3>
-                    <form id="add-category-form">
-                        <div class="form-group">
-                            <input type="text" id="cat-name-input" placeholder="Category Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="cat-icon-input" placeholder="fa-solid fa-icon" required>
-                        </div>
-                        <button type="submit" class="btn admin-btn">Add Category</button>
-                    </form>
-                </div>
-                <div class="admin-section">
-                    <h3>Existing Categories</h3>
-                    <div class="admin-cart-view" id="admin-category-list">
-                        <!-- List of categories -->
+            <!-- MODULE: ORDERS (Placeholder) -->
+            <div id="module-orders" class="admin-module">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Recent Orders</h3>
                     </div>
+                    <p style="text-align: center; color: #999; padding: 40px;">Order management coming soon.</p>
                 </div>
             </div>
 
-            <!-- SETTINGS TAB -->
-            <div id="tab-settings" class="admin-tab-content">
-                <div class="admin-section">
-                    <h3>Admin Settings</h3>
-                    <form id="admin-settings-form">
-                        <div class="form-group">
-                            <label>Admin Email</label>
-                            <input type="email" id="admin-email-input" placeholder="admin@example.com">
+            <!-- MODULE: SETTINGS -->
+            <div id="module-settings" class="admin-module">
+                <div class="admin-card" style="max-width: 600px;">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Account Settings</h3>
+                    </div>
+                    <form id="new-admin-settings-form">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Admin Email</label>
+                            <input type="email" id="new-admin-email" class="admin-form-input">
                         </div>
-                        <div class="form-group">
-                            <label>New Password</label>
-                            <input type="password" id="admin-pass-input" placeholder="New Password">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">New Password</label>
+                            <input type="password" id="new-admin-pass" class="admin-form-input">
                         </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input type="password" id="admin-confirm-pass-input" placeholder="Confirm Password">
-                        </div>
-                        <button type="submit" class="btn admin-btn">Update Profile</button>
+                        <button type="submit" class="admin-btn admin-btn-primary">Update Profile</button>
                     </form>
                 </div>
             </div>
 
-            <div class="admin-actions">
-                <!-- Logout moved to header -->
-            </div>
-        </div>
+        </main>
     </div>
 
     <!-- Admin Float Button REMOVED -->

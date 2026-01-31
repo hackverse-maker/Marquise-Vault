@@ -69,12 +69,11 @@ let adminCreds = JSON.parse(localStorage.getItem('adminCreds')) || { email: 'adm
 let pageLayout = JSON.parse(localStorage.getItem('pageLayout')) || DEFAULT_LAYOUT;
 let heroSlides = JSON.parse(localStorage.getItem('heroSlides')) || DEFAULT_HERO_SLIDES;
 
-// Force reset if version mismatch (Simple migration for this task)
+// Force reset if version mismatch
 if (storedVersion !== CONFIG_VERSION) {
-    heroSlides = DEFAULT_HERO_SLIDES; // Reset hero slides to pick up new images
+    heroSlides = DEFAULT_HERO_SLIDES;
     localStorage.setItem('heroSlides', JSON.stringify(heroSlides));
     localStorage.setItem('configVersion', CONFIG_VERSION);
-    // Optional: Reset products too if needed, but hero is key here.
 }
 
 // Save Funcs
@@ -99,7 +98,7 @@ function renderAll() {
     renderPage();
     renderCart();
     updateCartCount();
-    updateAdminUI();
+    if (typeof initAdmin === 'function') initAdmin();
 }
 
 // --- Page Rendering ---
@@ -117,10 +116,9 @@ function renderPage() {
         if (section.type === 'hero') {
             renderHeroSection(secDiv);
         } else if (section.type === 'featured') {
-            secDiv.className = 'featured-products'; // Keep existing class styles
+            secDiv.className = 'featured-products';
             renderFeaturedSection(secDiv);
         } else if (section.type === 'categories') {
-            // We'll render categories inside this container
             renderCategoriesSection(secDiv);
         } else if (section.type === 'banner') {
             renderBannerSection(secDiv, section);
@@ -132,8 +130,6 @@ function renderPage() {
 
         mainContainer.appendChild(secDiv);
     });
-
-    // Re-init any sliders or listeners
 }
 
 /* Hero Section Renderer */
@@ -159,7 +155,6 @@ function renderHeroSection(container) {
         </div>
     `;
 
-    // Start Hero Slider Animation (Simple Interval)
     if (window.heroInterval) clearInterval(window.heroInterval);
     let current = 0;
     const slides = container.querySelectorAll('.slide');
@@ -188,9 +183,8 @@ function renderFeaturedSection(container) {
         </div>
     `;
 
-    // Render Items
     const sliderInner = container.querySelector('.featured-slider');
-    const productsToFeature = products.slice(0, 5); // Just take first 5 for now, or use a 'featured' flag
+    const productsToFeature = products.slice(0, 5);
 
     if (productsToFeature.length === 0) {
         sliderInner.innerHTML = '<p>No featured products.</p>';
@@ -210,7 +204,6 @@ function renderFeaturedSection(container) {
         sliderInner.appendChild(slide);
     });
 
-    // Init Slider Logic
     const prev = container.querySelector('.prev-btn');
     const next = container.querySelector('.next-btn');
     let idx = 0;
@@ -235,11 +228,6 @@ function renderCategoriesSection(container) {
         <div id="dynamic-categories-container-inner"></div>
     `;
     const inner = container.querySelector('#dynamic-categories-container-inner');
-
-    // Reuse existing render logic logic
-    // We'll call the logic but target this inner container
-    // However, existing renderProducts() creates headers and specific category grids.
-    // Let's refactor renderProducts to accept a container.
     renderProducts(inner);
 }
 
@@ -283,17 +271,14 @@ function renderCustomSliderSection(container, section) {
         </div>
     `;
 
-    // Init Interval
     const slideEls = container.querySelectorAll('.slide');
     let current = 0;
     if (slideEls.length > 0) {
-        // Attach interval to element to avoid leaks if re-rendered? 
-        // For simplicity:
         setInterval(() => {
             slideEls[current].classList.remove('active');
             current = (current + 1) % slideEls.length;
             slideEls[current].classList.add('active');
-        }, 3000 + (Math.random() * 1000)); // slight offset
+        }, 3000 + (Math.random() * 1000));
     }
 }
 
@@ -304,8 +289,7 @@ function renderTextSection(container, data) {
     container.innerHTML = `<h3>${data.content ? data.content.text : 'Text Block'}</h3>`;
 }
 
-
-// --- Categories Logic (Updated to accept container) ---
+// --- Categories Logic ---
 const DEFAULT_CATEGORIES = [
     { id: 'tote', name: 'Tote Bags', icon: 'fa-solid fa-bag-shopping' },
     { id: 'shoulder', name: 'Shoulder Bags', icon: 'fa-solid fa-hourglass' },
@@ -323,11 +307,8 @@ function saveCategories() {
 }
 
 function renderProducts(targetContainer) {
-    // If no target provided, don't run (it's called by renderPage now)
     if (!targetContainer) return;
-
     targetContainer.innerHTML = '';
-
     categories.forEach(cat => {
         const section = document.createElement('div');
         section.className = 'product-category';
@@ -383,8 +364,7 @@ function updateNavbarDropdown() {
     dropdown.innerHTML = html;
 }
 
-// --- Cart Logic (Unchanged but ensuring renderAll works) ---
-
+// --- Cart Logic ---
 const cartPanel = document.getElementById('cart-panel');
 const cartCloseBtn = document.getElementById('cart-close-btn');
 
@@ -392,7 +372,6 @@ if (cartCloseBtn) cartCloseBtn.addEventListener('click', () => {
     cartPanel.classList.remove('active');
 });
 
-// Update main nav cart icon
 const cartIcon = document.querySelector('.header-icon .fa-cart-shopping');
 if (cartIcon) cartIcon.parentElement.addEventListener('click', () => {
     cartPanel.classList.add('active');
@@ -471,439 +450,409 @@ function updateCartCount() {
 }
 
 
-// --- Admin Logic ---
+// --- Professional Admin Dashboard Logic ---
 
-const adminPortal = document.getElementById('admin-portal');
-const sidebarEntry = document.getElementById('admin-sidebar-entry');
-const closeAdminBtn = document.getElementById('admin-close-btn');
+const adminDashboard = document.getElementById('admin-dashboard-container');
+const entryBtn = document.getElementById('admin-sidebar-entry');
+const closeDashboardBtn = document.getElementById('close-admin-dashboard');
+const logoutBtn = document.getElementById('new-admin-logout');
 
-function updateAdminUI() {
-    // Determine visibility or state of admin elements
+// Initial State
+let activeModule = localStorage.getItem('activeAdminModule') || 'dashboard';
+
+// --- Initialization & Entry ---
+
+function initAdmin() {
     if (isAdmin) {
-        // Prepare lists
-        renderAdminLayoutList();
-        renderAdminProductList();
-        renderAdminCategoryList();
-
-        // Pre-fill settings
-        const mailInput = document.getElementById('admin-email-input');
-        if (mailInput) mailInput.value = adminCreds.email;
-
+        if (adminDashboard) {
+            switchAdminModule(activeModule);
+        }
     } else {
-        adminPortal.classList.remove('active');
+        if (adminDashboard) adminDashboard.classList.remove('active');
     }
+    updateAdminStats();
 }
 
-if (sidebarEntry) {
-    sidebarEntry.addEventListener('click', () => {
+if (entryBtn) {
+    entryBtn.onclick = () => {
         if (isAdmin) {
-            adminPortal.classList.add('active');
+            adminDashboard.classList.add('active');
+            switchAdminModule(activeModule);
         } else {
-            // Show Login
             const authModal = document.getElementById('auth-modal');
             if (authModal) {
                 authModal.classList.add('active');
-                // Ensure signin is shown
                 document.getElementById('signin-form').classList.add('active');
                 document.getElementById('signup-form').classList.remove('active');
             }
         }
-    });
+    };
 }
-if (closeAdminBtn) closeAdminBtn.addEventListener('click', () => adminPortal.classList.remove('active'));
 
-// Admin Tabs Logic
-const tabBtns = document.querySelectorAll('.admin-tab-btn');
-const tabContents = document.querySelectorAll('.admin-tab-content');
+if (closeDashboardBtn) closeDashboardBtn.onclick = () => adminDashboard.classList.remove('active');
+if (logoutBtn) logoutBtn.onclick = logoutAdmin;
 
-tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Remove active class from all
-        tabBtns.forEach(b => b.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active'));
+function logoutAdmin() {
+    isAdmin = false;
+    localStorage.setItem('isAdmin', 'false');
+    if (adminDashboard) adminDashboard.classList.remove('active');
+    renderAll();
+}
 
-        // Add active class to clicked
-        btn.classList.add('active');
-        const tabId = btn.getAttribute('data-tab');
-        document.getElementById(`tab-${tabId}`).classList.add('active');
-    });
-});
+// --- Module System ---
 
-// Layout Manager
-function renderAdminLayoutList() {
-    const list = document.getElementById('admin-section-list');
-    if (!list) return;
-    list.innerHTML = '';
+window.switchAdminModule = function (moduleName) {
+    activeModule = moduleName;
+    localStorage.setItem('activeAdminModule', moduleName);
 
-    pageLayout.forEach((section, index) => {
-        const item = document.createElement('div');
-        item.className = 'layout-item';
+    document.querySelectorAll('.admin-module').forEach(m => m.classList.remove('active'));
+    const targetModule = document.getElementById(`module-${moduleName}`);
+    if (targetModule) targetModule.classList.add('active');
 
-        let editBtn = '';
-        if (['hero', 'banner', 'text', 'slider'].includes(section.type)) {
-            editBtn = `<button class="layout-btn" title="Edit Content" onclick="openEditSectionModal(${index})"><i class="fa-solid fa-pen"></i></button>`;
+    document.querySelectorAll('.admin-nav-item').forEach(item => {
+        item.classList.remove('active');
+        const span = item.querySelector('span');
+        if (span && span.textContent.toLowerCase() === moduleName.toLowerCase()) {
+            item.classList.add('active');
         }
-
-        item.innerHTML = `
-            <h4>${section.type.toUpperCase()}: ${section.title || section.id}</h4>
-            <div class="layout-item-controls">
-                ${editBtn}
-                <button class="layout-btn" title="Move Up" onclick="moveSection(${index}, -1)"><i class="fa-solid fa-arrow-up"></i></button>
-                <button class="layout-btn" title="Move Down" onclick="moveSection(${index}, 1)"><i class="fa-solid fa-arrow-down"></i></button>
-                <button class="layout-btn" title="Delete" style="color:red;" onclick="deleteSection(${index})"><i class="fa-solid fa-trash"></i></button>
-            </div>
-        `;
-        list.appendChild(item);
     });
-}
 
-function moveSection(index, direction) {
-    const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= pageLayout.length) return;
+    const titleEl = document.getElementById('admin-page-title');
+    if (titleEl) titleEl.textContent = moduleName.charAt(0).toUpperCase() + moduleName.slice(1);
 
-    // Swap
-    const temp = pageLayout[index];
-    pageLayout[index] = pageLayout[newIndex];
-    pageLayout[newIndex] = temp;
-    saveLayout();
-}
+    refreshModuleData(moduleName);
+};
 
-function deleteSection(index) {
-    if (confirm('Delete this section?')) {
-        pageLayout.splice(index, 1);
-        saveLayout();
+function refreshModuleData(moduleName) {
+    updateAdminStats();
+    if (moduleName === 'products') renderNewAdminProductList();
+    if (moduleName === 'categories') renderNewAdminCategoryList();
+    if (moduleName === 'hero') renderHeroManager();
+    if (moduleName === 'layout') renderNewAdminLayoutList();
+    if (moduleName === 'settings') {
+        const emailInput = document.getElementById('new-admin-email');
+        if (emailInput) emailInput.value = adminCreds.email;
     }
 }
 
-// Edit Section Logic
-const editModal = document.getElementById('edit-section-modal');
-const editClose = document.getElementById('edit-section-close');
-const editForm = document.getElementById('edit-section-form');
-const editContainer = document.getElementById('edit-section-dynamic-inputs');
-let currentEditIndex = -1;
-
-if (editClose) editClose.onclick = () => editModal.classList.remove('active');
-
-function openEditSectionModal(index) {
-    currentEditIndex = index;
-    const section = pageLayout[index];
-    document.getElementById('edit-modal-title').textContent = `Edit ${section.type.toUpperCase()}`;
-    editContainer.innerHTML = '';
-
-    if (section.type === 'hero') {
-        // Hero Editing: Manage Slides
-        heroSlides.forEach((slide, i) => {
-            const div = document.createElement('div');
-            div.style.borderBottom = '1px solid #eee';
-            div.style.marginBottom = '10px';
-            div.style.paddingBottom = '10px';
-            div.innerHTML = `
-                <p>Slide ${i + 1}</p>
-                <input type="text" placeholder="Caption" value="${slide.text}" onchange="updateHeroSlide(${i}, 'text', this.value)" style="width:100%; margin-bottom:5px;">
-                <input type="file" onchange="updateHeroSlideImage(${i}, this)" style="margin-bottom:5px;">
-                <div style="font-size:0.8rem; color:#888;">Current: ${slide.img.substring(0, 20)}...</div>
-                <button type="button" class="delete-btn" onclick="deleteHeroSlide(${i})" style="margin-top:5px; width:auto; padding:5px 10px;">Remove Slide</button>
-            `;
-            editContainer.appendChild(div);
-        });
-        const addBtn = document.createElement('button');
-        addBtn.type = 'button';
-        addBtn.className = 'btn admin-btn';
-        addBtn.textContent = 'Add New Slide';
-        addBtn.onclick = () => {
-            heroSlides.push({ img: 'img/hero.jpeg', text: 'New Slide' });
-            openEditSectionModal(index); // Re-render
-        };
-        editContainer.appendChild(addBtn);
-
-    } else if (section.type === 'banner') {
-        // Banner Editing
-        editContainer.innerHTML = `
-            <label>Banner Image</label>
-            <input type="file" id="edit-banner-img">
-            <div id="edit-banner-preview" class="image-preview-box">
-                <img src="${section.content.image}" style="width:100%;height:100%;object-fit:cover;">
-            </div>
-        `;
-        document.getElementById('edit-banner-img').onchange = function () {
-            if (this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('edit-banner-preview').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
-                    section.content.image = e.target.result; // Stage change
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
-        };
-
-    } else if (section.type === 'text') {
-        editContainer.innerHTML = `
-            <label>Text Content</label>
-            <textarea id="edit-text-content" rows="4" style="width:100%;">${section.content.text}</textarea>
-        `;
-        document.getElementById('edit-text-content').onchange = function () {
-            section.content.text = this.value;
-        };
-    }
-
-    editModal.classList.add('active');
+function updateAdminStats() {
+    const prodStat = document.getElementById('stat-total-products');
+    const catStat = document.getElementById('stat-total-categories');
+    if (prodStat) prodStat.textContent = products.length;
+    if (catStat) catStat.textContent = categories.length;
 }
 
-window.updateHeroSlide = (index, field, value) => {
-    heroSlides[index][field] = value;
-};
+// --- Module: Products ---
 
-window.updateHeroSlideImage = (index, input) => {
-    if (input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            heroSlides[index].img = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-};
-
-window.deleteHeroSlide = (index) => {
-    heroSlides.splice(index, 1);
-    openEditSectionModal(currentEditIndex);
-};
-
-if (editForm) {
-    editForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // For Banner/Text, changes are staged in the object reference directly or via onchange.
-        // For Hero, we update the global heroSlides.
-
-        saveLayout(); // Saves pageLayout AND heroSlides
-        editModal.classList.remove('active');
-        renderAll(); // Refresh UI
-        alert('Changes Saved!');
-    });
-}
-window.openEditSectionModal = openEditSectionModal;
-
-// Add New Section
-const addSectionBtn = document.getElementById('btn-add-section');
-const newSectionType = document.getElementById('new-section-type');
-
-if (addSectionBtn) {
-    addSectionBtn.addEventListener('click', () => {
-        const type = newSectionType.value;
-        const id = `section-${Date.now()}`;
-        let title = 'New Section';
-        let content = {};
-
-        if (type === 'banner') {
-            title = 'Banner';
-            // Prompt for image? For now add placeholder.
-            content = { image: 'img/hero.jpeg' }; // Default placeholder
-        } else if (type === 'slider') {
-            title = 'Image Slider';
-        } else if (type === 'text') {
-            title = 'Text Block';
-            content = { text: 'New Text Block' };
+window.toggleAddProductForm = function () {
+    const container = document.getElementById('new-product-form-container');
+    if (container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        const catSelect = document.getElementById('new-prod-category');
+        if (catSelect) {
+            catSelect.innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
         }
+    }
+};
 
-        pageLayout.push({ id, type, title, content });
-        saveLayout();
-    });
-}
-
-// Product Manager
-function renderAdminProductList() {
-    const list = document.getElementById('admin-product-list');
+function renderNewAdminProductList() {
+    const list = document.getElementById('new-admin-product-list');
     if (!list) return;
     list.innerHTML = '';
 
     products.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'admin-cart-item';
-        div.innerHTML = `
-            <img src="${p.image}" style="width:40px;height:40px;object-fit:cover;">
-            <div class="admin-cart-info">
-                <h4>${p.name}</h4>
-                <p>${p.price}</p>
-            </div>
-            <button class="delete-btn" onclick="deleteProduct('${p.id}')">Delete</button>
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><img src="${p.image}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;"></td>
+            <td><strong>${p.name}</strong></td>
+            <td>${p.category}</td>
+            <td>${formatPrice(p.price)}</td>
+            <td>
+                <button class="admin-btn admin-btn-danger" onclick="deleteProduct('${p.id}')">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
         `;
-        list.appendChild(div);
+        list.appendChild(tr);
     });
-
-    // Populate Category Dropdown
-    const catSelect = document.getElementById('prod-category');
-    if (catSelect) {
-        catSelect.innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-    }
 }
 
-function deleteProduct(id) {
-    if (confirm('Delete product?')) {
+const newAddProdForm = document.getElementById('new-add-product-form');
+if (newAddProdForm) {
+    newAddProdForm.onsubmit = (e) => {
+        e.preventDefault();
+        const name = document.getElementById('new-prod-name').value;
+        const price = document.getElementById('new-prod-price').value;
+        const cat = document.getElementById('new-prod-category').value;
+        const imgFile = document.getElementById('new-prod-image').files[0];
+
+        if (imgFile) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const newProd = {
+                    id: 'prod-' + Date.now(),
+                    name,
+                    price: parseFloat(price),
+                    category: cat,
+                    image: ev.target.result,
+                    desc: 'New Product'
+                };
+                products.push(newProd);
+                saveProducts();
+                newAddProdForm.reset();
+                toggleAddProductForm();
+                renderNewAdminProductList();
+                updateAdminStats();
+            };
+            reader.readAsDataURL(imgFile);
+        }
+    };
+}
+
+window.deleteProduct = function (id) {
+    if (confirm('Are you sure you want to delete this product?')) {
         products = products.filter(p => p.id !== id);
         saveProducts();
+        renderNewAdminProductList();
+        updateAdminStats();
     }
-}
+};
 
-// Category Manager
-function renderAdminCategoryList() {
-    const list = document.getElementById('admin-category-list');
+// --- Module: Categories ---
+
+function renderNewAdminCategoryList() {
+    const list = document.getElementById('new-admin-category-list');
     if (!list) return;
     list.innerHTML = '';
 
     categories.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>${c.name}</strong></td>
+            <td><i class="${c.icon}"></i></td>
+            <td>
+                <button class="admin-btn admin-btn-danger" onclick="deleteCategory('${c.id}')">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        `;
+        list.appendChild(tr);
+    });
+}
+
+const newAddCatForm = document.getElementById('new-add-category-form');
+if (newAddCatForm) {
+    newAddCatForm.onsubmit = (e) => {
+        e.preventDefault();
+        const name = document.getElementById('new-cat-name').value;
+        const icon = document.getElementById('new-cat-icon').value;
+        const id = name.toLowerCase().replace(/\s+/g, '-');
+
+        if (categories.find(c => c.id === id)) {
+            alert('Category already exists!');
+            return;
+        }
+
+        categories.push({ id, name, icon });
+        saveCategories();
+        newAddCatForm.reset();
+        renderNewAdminCategoryList();
+        updateAdminStats();
+    };
+}
+
+window.deleteCategory = function (id) {
+    if (confirm('Delete Category?')) {
+        categories = categories.filter(c => c.id !== id);
+        saveCategories();
+        renderNewAdminCategoryList();
+        updateAdminStats();
+    }
+};
+
+// --- Module: Hero Manager ---
+
+function renderHeroManager() {
+    const container = document.getElementById('hero-slides-manager-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    heroSlides.forEach((slide, index) => {
         const div = document.createElement('div');
-        div.className = 'admin-cart-item';
+        div.className = 'admin-card';
+        div.style.marginBottom = '10px';
+        div.style.padding = '15px';
         div.innerHTML = `
-             <div class="admin-cart-info">
-                 <h4>${c.name}</h4> 
-             </div>
-             <button class="delete-btn" onclick="deleteCategory('${c.id}')">Delete</button>
-         `;
+            <div style="display:flex; gap:15px; align-items:center;">
+                <img src="${slide.img}" style="width:80px;height:60px;object-fit:cover;border-radius:4px;">
+                <div style="flex:1;">
+                    <input type="text" class="admin-form-input" value="${slide.text}" placeholder="Slide Caption" onchange="updateHeroSlideData(${index}, 'text', this.value)">
+                    <input type="file" style="margin-top:5px; font-size:0.8rem;" onchange="updateHeroSlideData(${index}, 'image', this)">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:5px;">
+                    <button class="layout-btn" title="Move Up" onclick="moveSlide(${index}, -1)"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button class="layout-btn" title="Move Down" onclick="moveSlide(${index}, 1)"><i class="fa-solid fa-arrow-down"></i></button>
+                    <button class="layout-btn" title="Delete Slide" style="color:#f64e60;" onclick="removeHeroSlide(${index})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+window.updateHeroSlideData = function (index, type, value) {
+    if (type === 'text') {
+        heroSlides[index].text = value;
+    } else if (type === 'image' && value.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            heroSlides[index].img = e.target.result;
+            renderHeroManager();
+        };
+        reader.readAsDataURL(value.files[0]);
+    }
+};
+
+window.addNewHeroSlide = function () {
+    heroSlides.push({ img: 'img/hero.jpeg', text: 'New Slide' });
+    renderHeroManager();
+};
+
+window.removeHeroSlide = function (index) {
+    heroSlides.splice(index, 1);
+    renderHeroManager();
+};
+
+window.moveSlide = function (index, dir) {
+    const newIdx = index + dir;
+    if (newIdx < 0 || newIdx >= heroSlides.length) return;
+    const temp = heroSlides[index];
+    heroSlides[index] = heroSlides[newIdx];
+    heroSlides[newIdx] = temp;
+    renderHeroManager();
+};
+
+window.saveHeroChanges = function () {
+    saveLayout();
+    alert('Hero slides updated successfully!');
+};
+
+
+// --- Module: Layout Manager ---
+
+function renderNewAdminLayoutList() {
+    const list = document.getElementById('new-layout-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    pageLayout.forEach((sec, index) => {
+        const div = document.createElement('div');
+        div.className = 'layout-item';
+        div.style.padding = '15px';
+        div.innerHTML = `
+            <div>
+                <strong style="color:var(--admin-primary)">${sec.type.toUpperCase()}</strong>: ${sec.title || sec.id}
+            </div>
+            <div class="layout-item-controls">
+                <button class="layout-btn" title="Move Up" onclick="moveLayout(${index}, -1)"><i class="fa-solid fa-arrow-up"></i></button>
+                <button class="layout-btn" title="Move Down" onclick="moveLayout(${index}, 1)"><i class="fa-solid fa-arrow-down"></i></button>
+                <button class="layout-btn" title="Delete Section" style="color:#f64e60" onclick="removeSection(${index})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        `;
         list.appendChild(div);
     });
 }
 
-function deleteCategory(id) {
-    if (confirm('Delete Category?')) {
-        categories = categories.filter(c => c.id !== id);
-        saveCategories();
+window.moveLayout = function (index, dir) {
+    const newIdx = index + dir;
+    if (newIdx < 0 || newIdx >= pageLayout.length) return;
+    const temp = pageLayout[index];
+    pageLayout[index] = pageLayout[newIdx];
+    pageLayout[newIdx] = temp;
+    saveLayout();
+    renderNewAdminLayoutList();
+};
+
+window.removeSection = function (index) {
+    if (confirm('Remove this section from homepage?')) {
+        pageLayout.splice(index, 1);
+        saveLayout();
+        renderNewAdminLayoutList();
     }
-}
+};
 
-// Add Forms Logic
-const addProdForm = document.getElementById('add-product-form');
-if (addProdForm) {
-    const imgInput = document.getElementById('prod-image-input');
-    const preview = document.getElementById('image-preview');
+window.addNewSectionFromLayout = function () {
+    const type = document.getElementById('new-layout-type-select').value;
+    const id = `section-${Date.now()}`;
+    let title = type.charAt(0).toUpperCase() + type.slice(1);
+    let content = {};
 
-    imgInput.addEventListener('change', function () {
-        if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
-            };
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
+    if (type === 'banner') content = { image: 'img/hero.jpeg' };
+    if (type === 'text') content = { text: 'Default Text' };
 
-    addProdForm.addEventListener('submit', (e) => {
+    pageLayout.push({ id, type, title, content });
+    saveLayout();
+    renderNewAdminLayoutList();
+};
+
+// --- Settings Module Logic ---
+
+const newSettingsForm = document.getElementById('new-admin-settings-form');
+if (newSettingsForm) {
+    newSettingsForm.onsubmit = (e) => {
         e.preventDefault();
-        const name = document.getElementById('prod-name').value;
-        const price = document.getElementById('prod-price').value;
-        const cat = document.getElementById('prod-category').value;
-        const file = imgInput.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                products.push({
-                    id: Date.now().toString(),
-                    name,
-                    price: parseFloat(price),
-                    category: cat,
-                    image: e.target.result
-                });
-                saveProducts();
-                addProdForm.reset();
-                preview.innerHTML = '<span>No Image</span>';
-                alert('Product Added');
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-}
-
-const addCatForm = document.getElementById('add-category-form');
-if (addCatForm) {
-    addCatForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('cat-name-input').value;
-        const icon = document.getElementById('cat-icon-input').value;
-        const id = name.toLowerCase().replace(/\s+/g, '-');
-
-        categories.push({ id, name, icon });
-        saveCategories();
-        addCatForm.reset();
-        alert('Category Added');
-    });
-}
-
-// --- Auth Logic ---
-
-const authModal = document.getElementById('auth-modal');
-const signinFormEl = document.getElementById('signin-form') ? document.getElementById('signin-form').querySelector('form') : null;
-
-if (signinFormEl) {
-    signinFormEl.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('signin-email').value;
-        const password = document.getElementById('signin-password').value;
-
-        if (email === adminCreds.email && password === adminCreds.pass) {
-            isAdmin = true;
-            localStorage.setItem('isAdmin', 'true');
-            authModal.classList.remove('active');
-            updateAdminUI();
-            adminPortal.classList.add('active'); // Auto open
-            alert("Welcome Admin");
-        } else {
-            alert("Invalid Credentials (Try: " + adminCreds.email + ")");
-        }
-    });
-}
-
-// Settings Form
-const settingsForm = document.getElementById('admin-settings-form');
-if (settingsForm) {
-    settingsForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('admin-email-input').value;
-        const pass = document.getElementById('admin-pass-input').value;
-        const confirm = document.getElementById('admin-confirm-pass-input').value;
+        const email = document.getElementById('new-admin-email').value;
+        const pass = document.getElementById('new-admin-pass').value;
 
         if (email) adminCreds.email = email;
-        if (pass) {
-            if (pass !== confirm) {
-                alert("Passwords do not match");
-                return;
-            }
-            adminCreds.pass = pass;
-        }
+        if (pass) adminCreds.pass = pass;
 
         localStorage.setItem('adminCreds', JSON.stringify(adminCreds));
-        alert("Admin Profile Updated");
-    });
+        alert('Profile updated!');
+    };
 }
 
-const logoutBtn = document.getElementById('admin-logout-btn');
-if (logoutBtn) logoutBtn.addEventListener('click', () => {
-    isAdmin = false;
-    localStorage.setItem('isAdmin', 'false');
-    updateAdminUI();
-    alert('Logged out');
-});
+// Global Auth Toggle Helper
+window.toggleAuthForm = function (e) {
+    if (e) e.preventDefault();
+    const signin = document.getElementById('signin-form');
+    const signup = document.getElementById('signup-form');
+    signin.classList.toggle('active');
+    signup.classList.toggle('active');
+};
 
-// Admin Button inside Cart
-const adminLoginBtn = document.getElementById('cart-admin-login-btn');
-if (adminLoginBtn) adminLoginBtn.addEventListener('click', () => {
-    cartPanel.classList.remove('active');
-    authModal.classList.add('active');
-});
+// Custom Sign-In Logic for Admin
+const finalSigninForm = document.querySelector('#signin-form form');
+if (finalSigninForm) {
+    finalSigninForm.onsubmit = (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signin-email').value;
+        const pass = document.getElementById('signin-password').value;
 
-// Helpers to expose to window for onclick
-window.moveSection = moveSection;
-window.deleteSection = deleteSection;
-window.deleteProduct = deleteProduct;
-window.deleteCategory = deleteCategory;
+        if (email === adminCreds.email && pass === adminCreds.pass) {
+            isAdmin = true;
+            localStorage.setItem('isAdmin', 'true');
+            const authModal = document.getElementById('auth-modal');
+            if (authModal) authModal.classList.remove('active');
+            renderAll();
+
+            if (adminDashboard) {
+                adminDashboard.classList.add('active');
+                switchAdminModule('dashboard');
+            }
+        } else {
+            alert('Invalid credentials!');
+        }
+    };
+}
+
+// Helpers for window exposure
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.updateQty = updateQty;
-window.toggleAuthForm = function (e) {
-    e.preventDefault();
-    document.getElementById('signin-form').classList.toggle('active');
-    document.getElementById('signup-form').classList.toggle('active');
-};
 
 // Start
 document.addEventListener('DOMContentLoaded', () => {
+    initAdmin();
     renderAll();
 });
