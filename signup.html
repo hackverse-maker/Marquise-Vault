@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Marquise Vault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .auth-wrapper {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .auth-card {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .auth-card h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-family: var(--luxury-font);
+        }
+
+        .auth-card p {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background: #fcfcfc;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-color);
+            background: white;
+            outline: none;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .auth-links {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-links a {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            text-align: left;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="auth-wrapper">
+        <div class="auth-card">
+            <h1 class="luxury-font">Join the <span class="accent">Vault</span></h1>
+            <p>Create your account for a personalized luxury experience.</p>
+
+            <form id="signup-form">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" required placeholder="Jane">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" required placeholder="Doe">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" required placeholder="jane.doe@mail.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required placeholder="Choose a secure password">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
+                            Policy</a>.</label>
+                </div>
+
+                <button type="submit" class="btn auth-btn">Create Account</button>
+            </form>
+
+            <div class="auth-links">
+                Already have an account? <a href="login.html">Login</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/database.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('#navbar-placeholder', 'js/components/navbar.html');
+            loadComponent('#footer-placeholder', 'js/components/footer.html');
+
+            document.getElementById('signup-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Account creation successful! You can now login.');
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

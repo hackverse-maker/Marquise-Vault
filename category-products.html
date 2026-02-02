@@ -97,13 +97,24 @@
                     filtered = products.filter(p => p.category === catId);
                 }
             } else if (searchQuery) {
-                const query = searchQuery.toLowerCase();
+                const query = searchQuery.toLowerCase().trim();
                 titleEl.textContent = `Search: "${searchQuery}"`;
-                filtered = products.filter(p =>
-                    p.name.toLowerCase().includes(query) ||
-                    p.category.toLowerCase().includes(query) ||
-                    (p.desc && p.desc.toLowerCase().includes(query))
-                );
+
+                filtered = products.filter(p => {
+                    const productName = p.name.toLowerCase();
+                    const productCat = p.category.toLowerCase();
+                    const productDesc = (p.desc || "").toLowerCase();
+
+                    // Also find the category name for better matching
+                    const categoryObj = categories.find(c => c.id === p.category);
+                    const categoryName = categoryObj ? categoryObj.name.toLowerCase() : "";
+
+                    return productName.includes(query) ||
+                        productCat.includes(query) ||
+                        categoryName.includes(query) ||
+                        productDesc.includes(query);
+                });
+
                 subtitleEl.textContent = `Found ${filtered.length} results for your search.`;
             }
 

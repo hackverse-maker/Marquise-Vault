@@ -83,7 +83,6 @@ function formatPrice(amount) {
 function initHomePage() {
     const layout = getData('layout') || [
         { type: 'hero', active: true },
-        { type: 'categories', active: true },
         { type: 'featured', active: true },
         { type: 'category-products', active: true }
     ];
