@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Categories | Marquise Vault Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <style>
+        .admin-sidebar {
+            width: 250px;
+            height: 100vh;
+            background: var(--primary-color);
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 30px;
+        }
+
+        .admin-main {
+            margin-left: 250px;
+            padding: 40px;
+        }
+
+        .admin-logo {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            font-family: var(--luxury-font);
+        }
+
+        .admin-nav li {
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .cat-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .cat-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .cat-body {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cat-body h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .cat-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .preview-box {
+            width: 100%;
+            height: 150px;
+            border: 1px dashed #ccc;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body style="background: #f4f6f9;">
+
+    <aside class="admin-sidebar">
+        <div class="admin-logo">Admin <span class="accent">Panel</span></div>
+        <ul class="admin-nav">
+            <li><a href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+            <li><a href="products.html"><i class="fa-solid fa-bag-shopping"></i> Products</a></li>
+            <li><a href="categories.html" class="active"><i class="fa-solid fa-list"></i> Categories</a></li>
+            <li><a href="layout-editor.html"><i class="fa-solid fa-pen-to-square"></i> Layout</a></li>
+            <li><a href="orders.html"><i class="fa-solid fa-cart-check"></i> Orders</a></li>
+            <li style="margin-top: 3rem;"><a href="../index.html"><i class="fa-solid fa-eye"></i> View Store</a></li>
+            <li><a href="#" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1>Manage Categories</h1>
+            <button class="btn" onclick="openModal()">Add Category</button>
+        </div>
+
+        <div class="cat-grid" id="category-list">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="catModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 1.5rem;">Category Details</h2>
+            <form id="cat-form">
+                <div class="form-group">
+                    <label>Category ID (lowercase, no spaces)</label>
+                    <input type="text" id="cat-id" required placeholder="e.g. handbags">
+                </div>
+                <div class="form-group">
+                    <label>Category Name</label>
+                    <input type="text" id="cat-name" required placeholder="e.g. Hand Bags">
+                </div>
+                <div class="form-group">
+                    <label>Icon Class (FontAwesome)</label>
+                    <input type="text" id="cat-icon" required placeholder="e.g. fa-solid fa-hand-holding">
+                </div>
+                <div class="form-group">
+                    <label>Image</label>
+                    <input type="file" id="cat-img-input" accept="image/*">
+                    <div class="preview-box" id="cat-preview">
+                        <span style="color: #999;">Preview</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn" style="flex: 1;">Save Category</button>
+                    <button type="button" class="btn-outline" onclick="closeModal()" style="flex: 1;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script>
+        // Session Check
+        const session = JSON.parse(localStorage.getItem('mv_auth_session'));
+        if (!session || session.role !== 'admin') {
+            window.location.href = 'login.html';
+        }
+
+        let categories = getData('categories') || [];
+
+        function renderCategories() {
+            const list = document.getElementById('category-list');
+            list.innerHTML = categories.map((c, index) => `
+                <div class="cat-card">
+                    <img src="${c.image}" alt="">
+                    <div class="cat-body">
+                        <div>
+                            <h3>${c.name}</h3>
+                            <small style="color: #999;">ID: ${c.id}</small>
+                        </div>
+                        <div class="cat-actions">
+                            <button class="btn-icon" style="color: red;" onclick="deleteCategory('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.openModal = () => {
+            document.getElementById('catModal').style.display = 'flex';
+        };
+
+        window.closeModal = () => {
+            document.getElementById('catModal').style.display = 'none';
+            document.getElementById('cat-form').reset();
+            document.getElementById('cat-preview').innerHTML = '<span style="color: #999;">Preview</span>';
+        };
+
+        document.getElementById('cat-img-input').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    document.getElementById('cat-preview').innerHTML = `<img src="${evt.target.result}" alt="">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('cat-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const id = document.getElementById('cat-id').value.toLowerCase().replace(/\s/g, '-');
+            const name = document.getElementById('cat-name').value;
+            const icon = document.getElementById('cat-icon').value;
+            const imgEl = document.querySelector('#cat-preview img');
+            const image = imgEl ? imgEl.src : 'img/tote.jpeg';
+
+            const newCat = { id, name, icon, image };
+
+            // Overwrite if exists, else push
+            const existingIndex = categories.findIndex(c => c.id === id);
+            if (existingIndex > -1) {
+                categories[existingIndex] = newCat;
+            } else {
+                categories.push(newCat);
+            }
+
+            setData('categories', categories);
+            renderCategories();
+            closeModal();
+            alert('Category saved!');
+        });
+
+        window.deleteCategory = (id) => {
+            if (confirm('Delete this category? This might affect products using it.')) {
+                categories = categories.filter(c => c.id !== id);
+                setData('categories', categories);
+                renderCategories();
+            }
+        };
+
+        renderCategories();
+    </script>
+</body>
+
+</html>

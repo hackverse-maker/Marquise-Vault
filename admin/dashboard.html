@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Marquise Vault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <style>
+        .admin-sidebar {
+            width: 250px;
+            height: 100vh;
+            background: var(--primary-color);
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 30px;
+        }
+
+        .admin-main {
+            margin-left: 250px;
+            padding: 40px;
+        }
+
+        .admin-logo {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            font-family: var(--luxury-font);
+        }
+
+        .admin-nav li {
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .action-card {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .action-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        .action-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .action-card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body style="background: #f4f6f9;">
+
+    <aside class="admin-sidebar">
+        <div class="admin-logo">Admin <span class="accent">Panel</span></div>
+        <ul class="admin-nav">
+            <li><a href="dashboard.html" class="active"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+            <li><a href="products.html"><i class="fa-solid fa-bag-shopping"></i> Products</a></li>
+            <li><a href="categories.html"><i class="fa-solid fa-list"></i> Categories</a></li>
+            <li><a href="layout-editor.html"><i class="fa-solid fa-pen-to-square"></i> Layout</a></li>
+            <li><a href="orders.html"><i class="fa-solid fa-cart-check"></i> Orders</a></li>
+            <li style="margin-top: 3rem;"><a href="../index.html"><i class="fa-solid fa-eye"></i> View Store</a></li>
+            <li><a href="#" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <h1 style="margin-bottom: 2rem;">Dashboard Overview</h1>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <div class="value" id="count-products">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Categories</h3>
+                <div class="value" id="count-cats">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Orders</h3>
+                <div class="value">0</div>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 1.5rem;">Quick Actions</h2>
+        <div class="quick-actions" style="margin-bottom: 3rem;">
+            <a href="products.html" class="action-card">
+                <i class="fa-solid fa-plus-circle"></i>
+                <h2>Add Product</h2>
+                <p>Add new bags to your store</p>
+            </a>
+            <a href="layout-editor.html" class="action-card">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                <h2>Edit Layout</h2>
+                <p>Change homepage sections</p>
+            </a>
+            <a href="categories.html" class="action-card">
+                <i class="fa-solid fa-folder-plus"></i>
+                <h2>Categories</h2>
+                <p>Manage bag types</p>
+            </a>
+        </div>
+
+        <h2 style="margin-bottom: 1.5rem;">Sale Settings</h2>
+        <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="form-group">
+                    <label>Sale Message</label>
+                    <input type="text" id="sale-text" placeholder="e.g. FLASH SALE | 20% OFF">
+                </div>
+                <div class="form-group">
+                    <label>End Time (ISO Format)</label>
+                    <input type="datetime-local" id="sale-end">
+                </div>
+            </div>
+            <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="checkbox" id="sale-enabled"> Enable Sale Banner
+                </label>
+                <button class="btn btn-sm" id="update-settings" style="margin-left: auto;">Save Settings</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/database.js"></script>
+    <script>
+        // Session Check
+        const session = JSON.parse(localStorage.getItem('mv_auth_session'));
+        if (!session || session.role !== 'admin') {
+            window.location.href = 'login.html';
+        }
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('mv_auth_session');
+            window.location.href = 'login.html';
+        });
+
+        // Load stats
+        document.getElementById('count-products').textContent = getData('products').length;
+        document.getElementById('count-cats').textContent = getData('categories').length;
+
+        // Load settings
+        const settings = getData('settings');
+        if (settings) {
+            document.getElementById('sale-text').value = settings.saleText;
+            document.getElementById('sale-enabled').checked = settings.saleEnabled;
+            // Handle datetime-local format (needs YYYY-MM-DDTHH:mm)
+            if (settings.saleEndTime) {
+                const date = new Date(settings.saleEndTime);
+                const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+                document.getElementById('sale-end').value = localDate;
+            }
+        }
+
+        document.getElementById('update-settings').addEventListener('click', () => {
+            const newSettings = {
+                ...settings,
+                saleEnabled: document.getElementById('sale-enabled').checked,
+                saleText: document.getElementById('sale-text').value,
+                saleEndTime: new Date(document.getElementById('sale-end').value).toISOString()
+            };
+            setData('settings', newSettings);
+            alert('Settings updated successfully!');
+        });
+    </script>
+</body>
+
+</html>

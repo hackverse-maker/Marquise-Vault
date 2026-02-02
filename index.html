@@ -4,497 +4,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://kit.fontawesome.com/c6bd8840ab.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="admin_dashboard.css">
+    <title>Marquise Vault | Luxury Bags for the Modern Era</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
-    <header>
-        <!-- top banner -->
-        <div class="top-banner">
-            <p>LAUNCH SALE | Flat 10% off | Promo Code: V10 | Offer Ends In: <span class="countdown">02H 00M 00S</span>
-            </p>
-        </div>
-    </header>
 
-    <nav class="navbar-main">
-        <!-- logo -->
-        <div class="logo"><a href="#">MARQUISE</a></div>
-
-        <!-- nav list -->
-        <ul class="navbar">
-            <li><a href="#home">HOME</a></li>
-            <li class="collections-menu">
-                <a href="#collections">COLLECTIONS <i class="fa-solid fa-angle-down"></i></a>
-                <div class="dropdown-menu">
-                    <a href="#all" class="dropdown-item">
-                        <i class="fa-solid fa-border-all"></i>
-                        <span>All</span>
-                    </a>
-                    <a href="#tote" class="dropdown-item">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <span>Tote Bag</span>
-                    </a>
-                    <a href="#shoulder" class="dropdown-item">
-                        <i class="fa-solid fa-hourglass"></i>
-                        <span>Shoulder Bag</span>
-                    </a>
-                    <a href="#hand" class="dropdown-item">
-                        <i class="fa-solid fa-hand"></i>
-                        <span>Hand Bag</span>
-                    </a>
-                    <a href="#crossbody" class="dropdown-item">
-                        <i class="fa-solid fa-briefcase"></i>
-                        <span>Cross Body Bag</span>
-                    </a>
-                    <a href="#accessories" class="dropdown-item">
-                        <i class="fa-solid fa-ring"></i>
-                        <span>Accessories</span>
-                    </a>
-                    <a href="#pouches" class="dropdown-item">
-                        <i class="fa-solid fa-cube"></i>
-                        <span>Pouches</span>
-                    </a>
-                </div>
-            </li>
-            <li><a href="https://wa.me/+923243499882" target="_blank">CONTACT</a></li>
-        </ul>
-
-        <!-- menu icon  -->
-        <i class="fa-solid fa-bars" id="menu-icon"></i>
-
-        <!-- right icons -->
-        <div class="header-icon">
-            <i class="fa-solid fa-magnifying-glass" id="search-icon"></i>
-            <button class="user-btn" id="user-btn">
-                <i class="fa-solid fa-user"></i>
-            </button>
-            <i class="fa-solid fa-cart-shopping"><span>0</span></i>
-        </div>
-
-        <!-- search bar -->
-        <div class="search-box">
-            <input type="text" placeholder="Search...">
-        </div>
-    </nav>
-
-    <!-- Dynamic Main Content Container -->
-    <div id="main-content">
-        <!-- Sections will be rendered here by main.js -->
+    <!-- Sale Banner -->
+    <div id="sale-banner" class="sale-banner" style="display: none;">
+        <p><span id="sale-message"></span> | Ends In: <span id="countdown">--:--:--</span></p>
     </div>
 
-    <!-- Admin Portal Slide-in Panel -->
-    <div class="admin-sidebar-entry" id="admin-sidebar-entry">
-        <span>Admin Portal</span>
-    </div>
+    <!-- Navbar Container -->
+    <div id="navbar-placeholder"></div>
 
-    <!-- Professional Admin Dashboard Container -->
-    <div class="admin-dashboard-container" id="admin-dashboard-container">
-        <!-- Sidebar -->
-        <aside class="admin-sidebar">
-            <div class="admin-sidebar-header">
-                MARQUISE <span>ADMIN</span>
-            </div>
-            <div class="admin-nav">
-                <div class="admin-nav-item active" onclick="switchAdminModule('dashboard')">
-                    <i class="fa-solid fa-gauge-high"></i>
-                    <span>Dashboard</span>
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero" id="hero-section">
+            <div class="hero-wrapper">
+                <div class="hero-text">
+                    <h1>Luxury <br><span class="accent">Redefined</span></h1>
+                    <p>Discover our exclusive collection of premium bags handcrafted with passion and elegance.</p>
+                    <a href="categories.html" class="btn" style="width: fit-content;">Shop Collection</a>
                 </div>
-                <div class="admin-nav-item" onclick="switchAdminModule('products')">
-                    <i class="fa-solid fa-box-open"></i>
-                    <span>Products</span>
-                </div>
-                <div class="admin-nav-item" onclick="switchAdminModule('categories')">
-                    <i class="fa-solid fa-tags"></i>
-                    <span>Categories</span>
-                </div>
-                <div class="admin-nav-item" onclick="switchAdminModule('hero')">
-                    <i class="fa-solid fa-images"></i>
-                    <span>Hero Section</span>
-                </div>
-                <div class="admin-nav-item" onclick="switchAdminModule('layout')">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span>Layout Manager</span>
-                </div>
-                <div class="admin-nav-item" onclick="switchAdminModule('orders')">
-                    <i class="fa-solid fa-receipt"></i>
-                    <span>Orders</span>
-                </div>
-                <div class="admin-nav-item" onclick="switchAdminModule('settings')">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Settings</span>
-                </div>
-            </div>
-            <div class="admin-user-profile">
-                <div class="admin-avatar">A</div>
-                <div class="admin-user-info">
-                    <div class="admin-user-name">Admin User</div>
-                    <div class="admin-user-role">Super Admin</div>
-                </div>
-                <button id="new-admin-logout" class="admin-btn-danger"
-                    style="padding: 5px 10px; border-radius: 4px; border:none; cursor:pointer;" title="Logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="admin-main">
-            <div class="admin-topbar">
-                <h2 class="admin-page-title" id="admin-page-title">Dashboard</h2>
-                <button class="admin-close-btn" id="close-admin-dashboard" title="Close Admin Panel">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <!-- MODULE: DASHBOARD -->
-            <div id="module-dashboard" class="admin-module active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
-                        <div class="stat-info">
-                            <h3 id="stat-total-products">0</h3>
-                            <p>Total Products</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fa-solid fa-tags"></i></div>
-                        <div class="stat-info">
-                            <h3 id="stat-total-categories">0</h3>
-                            <p>Categories</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-                        <div class="stat-info">
-                            <h3>1</h3>
-                            <p>Active Admins</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
-                        <div class="stat-info">
-                            <h3>0</h3>
-                            <p>Pending Orders</p>
-                        </div>
+                <div class="hero-image">
+                    <div class="slider-container">
+                        <img src="img/hero.jpeg" class="slide active" alt="">
+                        <img src="img/hero (1).jpeg" class="slide" alt="">
+                        <img src="img/hero (2).jpeg" class="slide" alt="">
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- MODULE: PRODUCTS -->
-            <div id="module-products" class="admin-module">
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">Product List</h3>
-                        <button class="admin-btn admin-btn-primary" onclick="toggleAddProductForm()">
-                            <i class="fa-solid fa-plus"></i> Add Product
-                        </button>
-                    </div>
+        <!-- Categories Section -->
+        <section id="categories-section" class="categories-preview" style="padding: 100px 0;">
+            <!-- Rendered by JS -->
+        </section>
 
-                    <!-- Add Product Form (Hidden by default, toggled) -->
-                    <div id="new-product-form-container"
-                        style="display:none; margin-bottom: 20px; border-bottom: 1px solid #ebedf3; padding-bottom: 20px;">
-                        <form id="new-add-product-form">
-                            <div class="admin-form-group">
-                                <label class="admin-form-label">Product Name</label>
-                                <input type="text" id="new-prod-name" class="admin-form-input" required>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                <div class="admin-form-group">
-                                    <label class="admin-form-label">Price ($)</label>
-                                    <input type="number" id="new-prod-price" class="admin-form-input" required>
-                                </div>
-                                <div class="admin-form-group">
-                                    <label class="admin-form-label">Category</label>
-                                    <select id="new-prod-category" class="admin-form-select" required>
-                                        <!-- Dynamic -->
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="admin-form-group">
-                                <label class="admin-form-label">Product Image</label>
-                                <input type="file" id="new-prod-image" class="admin-form-input" accept="image/*"
-                                    required>
-                            </div>
-                            <button type="submit" class="admin-btn admin-btn-primary">Save Product</button>
-                            <button type="button" class="admin-btn" onclick="toggleAddProductForm()">Cancel</button>
-                        </form>
-                    </div>
-
-                    <div style="overflow-x: auto;">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="new-admin-product-list">
-                                <!-- Dynamic Rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <!-- Featured Products -->
+        <section class="featured-products container" id="featured-section">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="products-grid" id="featured-grid">
+                <!-- Data from database.js -->
             </div>
+        </section>
 
-            <!-- MODULE: CATEGORIES -->
-            <div id="module-categories" class="admin-module">
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">Manage Categories</h3>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
-                        <div>
-                            <form id="new-add-category-form">
-                                <div class="admin-form-group">
-                                    <label class="admin-form-label">Category Name</label>
-                                    <input type="text" id="new-cat-name" class="admin-form-input" required>
-                                </div>
-                                <div class="admin-form-group">
-                                    <label class="admin-form-label">Icon Class (FontAwesome)</label>
-                                    <input type="text" id="new-cat-icon" placeholder="fa-solid fa-bag-shopping"
-                                        class="admin-form-input" required>
-                                </div>
-                                <button type="submit" class="admin-btn admin-btn-primary" style="width:100%">Add
-                                    Category</button>
-                            </form>
-                        </div>
-                        <div>
-                            <table class="admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Icon</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="new-admin-category-list">
-                                    <!-- Dynamic Rows -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MODULE: HERO SECTION -->
-            <div id="module-hero" class="admin-module">
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">Hero Slider Management</h3>
-                        <button class="admin-btn admin-btn-primary" onclick="addNewHeroSlide()">
-                            <i class="fa-solid fa-plus"></i> Add Slide
-                        </button>
-                    </div>
-                    <div id="hero-slides-manager-container" style="display: flex; flex-direction: column; gap: 15px;">
-                        <!-- Dynamic Slides -->
-                    </div>
-                    <div style="margin-top: 20px; text-align: right;">
-                        <button class="admin-btn admin-btn-primary" onclick="saveHeroChanges()">Save Changes</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MODULE: LAYOUT MANAGER -->
-            <div id="module-layout" class="admin-module">
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">Homepage Section Layout</h3>
-                    </div>
-                    <div class="alert"
-                        style="background: #e1f0ff; color: #007bff; padding: 10px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem;">
-                        <i class="fa-solid fa-circle-info"></i> Reorder sections by using the Up/Down arrows.
-                    </div>
-                    <div id="new-layout-list" style="display: flex; flex-direction: column; gap: 10px;">
-                        <!-- Dynamic Layout Items -->
-                    </div>
-
-                    <div class="admin-card"
-                        style="margin-top: 20px; border: 1px dashed var(--admin-border); background: #fafafa;">
-                        <h4 style="margin-bottom: 10px; font-size: 1rem;">Add New Section</h4>
-                        <div style="display: flex; gap: 10px;">
-                            <select id="new-layout-type-select" class="admin-form-select">
-                                <option value="banner">Banner Image</option>
-                                <option value="text">Text Block</option>
-                                <option value="slider">Image Slider</option>
-                            </select>
-                            <button class="admin-btn admin-btn-primary" onclick="addNewSectionFromLayout()">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MODULE: ORDERS (Placeholder) -->
-            <div id="module-orders" class="admin-module">
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">Recent Orders</h3>
-                    </div>
-                    <p style="text-align: center; color: #999; padding: 40px;">Order management coming soon.</p>
-                </div>
-            </div>
-
-            <!-- MODULE: SETTINGS -->
-            <div id="module-settings" class="admin-module">
-                <div class="admin-card" style="max-width: 600px;">
-                    <div class="admin-card-header">
-                        <h3 class="admin-card-title">Account Settings</h3>
-                    </div>
-                    <form id="new-admin-settings-form">
-                        <div class="admin-form-group">
-                            <label class="admin-form-label">Admin Email</label>
-                            <input type="email" id="new-admin-email" class="admin-form-input">
-                        </div>
-                        <div class="admin-form-group">
-                            <label class="admin-form-label">New Password</label>
-                            <input type="password" id="new-admin-pass" class="admin-form-input">
-                        </div>
-                        <button type="submit" class="admin-btn admin-btn-primary">Update Profile</button>
-                    </form>
-                </div>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- Admin Float Button REMOVED -->
-
-    <!-- Shopping Cart Slide-in Panel -->
-    <div class="cart-panel" id="cart-panel">
-        <div class="cart-header">
-            <h2>Shopping Cart</h2>
-            <button id="cart-close-btn"><i class="fa-solid fa-xmark"></i></button>
+        <!-- Category Wise Products -->
+        <div id="category-products-sections">
+            <!-- Rendered by JS -->
         </div>
-        <div class="cart-content" id="cart-items-container">
-            <!-- Cart Items will be injected here -->
-            <p class="empty-cart-msg">Your cart is empty.</p>
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <span>Total:</span>
-                <span id="cart-total-amount">Rs. 0</span>
-            </div>
-            <button class="btn checkout-btn">Checkout</button>
-            <button id="cart-admin-login-btn" class="admin-link-btn">Admin Login</button>
-        </div>
-    </div>
+    </main>
 
-    <!-- Authentication Modal -->
-    <div class="auth-modal" id="auth-modal">
-        <div class="auth-modal-content">
-            <button class="auth-modal-close" id="auth-close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <!-- Sign In Form -->
-            <div class="auth-form active" id="signin-form">
-                <h2>Sign In</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="signin-email">Email</label>
-                        <input type="email" id="signin-email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signin-password">Password</label>
-                        <input type="password" id="signin-password" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="auth-btn">Sign In</button>
-                </form>
-                <p class="auth-toggle">Don't have an account? <a href="#" onclick="toggleAuthForm(event)">Sign Up</a>
-                </p>
-            </div>
-
-            <!-- Sign Up Form -->
-            <div class="auth-form" id="signup-form">
-                <h2>Sign Up</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="signup-username">Username</label>
-                        <input type="text" id="signup-username" placeholder="Choose a username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-email">Email</label>
-                        <input type="email" id="signup-email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-password">Password</label>
-                        <input type="password" id="signup-password" placeholder="Create a password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-confirm">Confirm Password</label>
-                        <input type="password" id="signup-confirm" placeholder="Confirm your password" required>
-                    </div>
-                    <button type="submit" class="auth-btn">Sign Up</button>
-                </form>
-                <p class="auth-toggle">Already have an account? <a href="#" onclick="toggleAuthForm(event)">Sign In</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section Edit Modal -->
-    <div class="auth-modal" id="edit-section-modal">
-        <div class="auth-modal-content" style="max-width: 600px;">
-            <button class="auth-modal-close" id="edit-section-close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="auth-form active" id="edit-section-form-container">
-                <h2 id="edit-modal-title">Edit Section</h2>
-                <form id="edit-section-form">
-                    <div id="edit-section-dynamic-inputs">
-                        <!-- Dynamic inputs based on section type -->
-                    </div>
-                    <button type="submit" class="auth-btn">Save Changes</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <h3>Useful Links</h3>
-                <ul>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Return Policy</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="https://wa.me/+923243499882" target="_blank">Contact Us</a></li>
-                </ul>
-            </div>
-            <div class="footer-social">
-                <h3>Follow Us</h3>
-                <div class="social-icons">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Marquise Vault. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <div class="whatsapp-container">
-        <a href="https://wa.me/+923243499882" class="whatsapp-btn">
-            <i class="fa-brands fa-whatsapp"></i>
+    <!-- Floating Admin Button -->
+    <div id="admin-float" class="admin-float" style="display: none;">
+        <a href="admin/dashboard.html">
+            <i class="fa-solid fa-user-gear"></i>
         </a>
-        <div class="chat-box">
-            <p>Chat with us</p>
-        </div>
     </div>
-    <script src="main.js"></script>
+
+    <!-- Footer Container -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Admin Access Shortcut (Landing Page) -->
+    <div style="text-align: center; padding: 20px; background: #f9f9f9;">
+        <a href="signin.html" style="font-size: 0.75rem; color: #bbb; text-transform: uppercase; letter-spacing: 1px;">
+            <i class="fa-solid fa-screwdriver-wrench"></i> Site Management
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/database.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Load Shared Components
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('#footer-placeholder', 'js/components/footer.html');
+            // Navbar will be added next
+        });
+    </script>
 </body>
 
 </html>

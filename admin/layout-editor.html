@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Editor | Marquise Vault Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <style>
+        .admin-sidebar {
+            width: 250px;
+            height: 100vh;
+            background: var(--primary-color);
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 30px;
+        }
+
+        .admin-main {
+            margin-left: 250px;
+            padding: 40px;
+        }
+
+        .admin-logo {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            font-family: var(--luxury-font);
+        }
+
+        .admin-nav li {
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-nav a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        .layout-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .layout-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .layout-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .layout-info i {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .layout-info h3 {
+            font-size: 1.1rem;
+        }
+
+        .layout-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .btn-icon:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-delete:hover {
+            color: #ff4d4d;
+        }
+
+        .add-section {
+            margin-top: 2rem;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            text-align: center;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-section:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+
+<body style="background: #f4f6f9;">
+
+    <aside class="admin-sidebar">
+        <div class="admin-logo">Admin <span class="accent">Panel</span></div>
+        <ul class="admin-nav">
+            <li><a href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+            <li><a href="products.html"><i class="fa-solid fa-bag-shopping"></i> Products</a></li>
+            <li><a href="categories.html"><i class="fa-solid fa-list"></i> Categories</a></li>
+            <li><a href="layout-editor.html" class="active"><i class="fa-solid fa-pen-to-square"></i> Layout</a></li>
+            <li><a href="orders.html"><i class="fa-solid fa-cart-check"></i> Orders</a></li>
+            <li style="margin-top: 3rem;"><a href="../index.html"><i class="fa-solid fa-eye"></i> View Store</a></li>
+            <li><a href="#" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <h1 style="margin-bottom: 0.5rem;">Homepage Layout Editor</h1>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Reorder or toggle visibility of homepage sections.</p>
+
+        <div id="layout-list">
+            <!-- Populated by JS -->
+        </div>
+
+        <div class="add-section">
+            <i class="fa-solid fa-plus-circle"></i>
+            <h3>Add New Section</h3>
+        </div>
+
+        <div style="margin-top: 3rem;">
+            <button class="btn" id="save-layout">Save Changes</button>
+        </div>
+    </main>
+
+    <script src="../js/database.js"></script>
+    <script>
+        // Session Check
+        const session = JSON.parse(localStorage.getItem('mv_auth_session'));
+        if (!session || session.role !== 'admin') {
+            window.location.href = 'login.html';
+        }
+
+        let layout = getData('layout');
+
+        function renderLayout() {
+            const list = document.getElementById('layout-list');
+            list.innerHTML = layout.map((item, index) => `
+                <div class="layout-item">
+                    <div class="layout-info">
+                        <i class="fa-solid fa-grip-lines"></i>
+                        <h3>${item.type.toUpperCase()} Section</h3>
+                    </div>
+                    <div class="layout-controls">
+                        <button class="btn-icon" onclick="moveUp(${index})"><i class="fa-solid fa-arrow-up"></i></button>
+                        <button class="btn-icon" onclick="moveDown(${index})"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button class="btn-icon ${item.active ? 'active' : ''}" onclick="toggleActive(${index})">
+                            <i class="fa-solid ${item.active ? 'fa-eye' : 'fa-eye-slash'}"></i>
+                        </button>
+                        <button class="btn-icon btn-delete" onclick="removeSection(${index})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.moveUp = (index) => {
+            if (index > 0) {
+                [layout[index], layout[index - 1]] = [layout[index - 1], layout[index]];
+                renderLayout();
+            }
+        };
+
+        window.moveDown = (index) => {
+            if (index < layout.length - 1) {
+                [layout[index], layout[index + 1]] = [layout[index + 1], layout[index]];
+                renderLayout();
+            }
+        };
+
+        window.toggleActive = (index) => {
+            layout[index].active = !layout[index].active;
+            renderLayout();
+        };
+
+        window.removeSection = (index) => {
+            if (confirm('Are you sure you want to remove this section?')) {
+                layout.splice(index, 1);
+                renderLayout();
+            }
+        };
+
+        document.getElementById('save-layout').addEventListener('click', () => {
+            setData('layout', layout);
+            alert('Layout saved successfully!');
+        });
+
+        renderLayout();
+    </script>
+</body>
+
+</html>
