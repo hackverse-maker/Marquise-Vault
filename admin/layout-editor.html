@@ -144,7 +144,7 @@
             <!-- Populated by JS -->
         </div>
 
-        <div class="add-section">
+        <div class="add-section" onclick="openAddModal()">
             <i class="fa-solid fa-plus-circle"></i>
             <h3>Add New Section</h3>
         </div>
@@ -154,6 +154,31 @@
         </div>
     </main>
 
+    <!-- Add Section Modal -->
+    <div id="addSectionModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 1.5rem;">Choose Section Type</h2>
+            <div style="display: grid; gap: 1rem;">
+                <button class="btn-outline" style="text-align: left; padding: 15px;" onclick="addNewSection('hero')">
+                    <i class="fa-solid fa-image"></i> Hero Slider Section
+                </button>
+                <button class="btn-outline" style="text-align: left; padding: 15px;"
+                    onclick="addNewSection('categories')">
+                    <i class="fa-solid fa-layer-group"></i> Shop By Category
+                </button>
+                <button class="btn-outline" style="text-align: left; padding: 15px;"
+                    onclick="addNewSection('featured')">
+                    <i class="fa-solid fa-star"></i> Featured Products
+                </button>
+                <button class="btn-outline" style="text-align: left; padding: 15px;"
+                    onclick="addNewSection('category-products')">
+                    <i class="fa-solid fa-list-ul"></i> Category-Wise Products
+                </button>
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 2rem;" onclick="closeAddModal()">Cancel</button>
+        </div>
+    </div>
+
     <script src="../js/database.js"></script>
     <script>
         // Session Check
@@ -162,7 +187,7 @@
             window.location.href = 'login.html';
         }
 
-        let layout = getData('layout');
+        let layout = getData('layout') || [];
 
         function renderLayout() {
             const list = document.getElementById('layout-list');
@@ -170,7 +195,7 @@
                 <div class="layout-item">
                     <div class="layout-info">
                         <i class="fa-solid fa-grip-lines"></i>
-                        <h3>${item.type.toUpperCase()} Section</h3>
+                        <h3>${item.type.replace('-', ' ').toUpperCase()} Section</h3>
                     </div>
                     <div class="layout-controls">
                         <button class="btn-icon" onclick="moveUp(${index})"><i class="fa-solid fa-arrow-up"></i></button>
@@ -183,6 +208,20 @@
                 </div>
             `).join('');
         }
+
+        window.openAddModal = () => {
+            document.getElementById('addSectionModal').style.display = 'flex';
+        };
+
+        window.closeAddModal = () => {
+            document.getElementById('addSectionModal').style.display = 'none';
+        };
+
+        window.addNewSection = (type) => {
+            layout.push({ type, active: true });
+            renderLayout();
+            closeAddModal();
+        };
 
         window.moveUp = (index) => {
             if (index > 0) {
@@ -212,7 +251,7 @@
 
         document.getElementById('save-layout').addEventListener('click', () => {
             setData('layout', layout);
-            alert('Layout saved successfully!');
+            alert('Layout saved successfully! Refresh the storefront to see changes.');
         });
 
         renderLayout();

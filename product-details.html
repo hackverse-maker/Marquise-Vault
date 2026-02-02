@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Marquise Vault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .details-wrapper {
+            margin: 100px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .main-img-box {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            background: #fdfdfd;
+        }
+
+        .main-img-box img {
+            width: 100%;
+            display: block;
+        }
+
+        .product-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-content .price {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .product-content .desc {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .actions-bar .btn {
+            flex: 1;
+            padding: 18px;
+            font-size: 1.1rem;
+        }
+
+        .product-meta {
+            margin-top: 3rem;
+            border-top: 1px solid #eee;
+            padding-top: 2rem;
+        }
+
+        .meta-item {
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .meta-item strong {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 992px) {
+            .details-wrapper {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .product-content h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="container">
+        <div class="details-wrapper" id="product-details">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/database.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('#navbar-placeholder', 'js/components/navbar.html');
+            loadComponent('#footer-placeholder', 'js/components/footer.html');
+            renderProductDetails();
+        });
+
+        function renderProductDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = parseInt(urlParams.get('id'));
+            const products = getData('products') || [];
+            const product = products.find(p => p.id === id);
+
+            if (!product) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.title = `${product.name} | Marquise Vault`;
+
+            const container = document.getElementById('product-details');
+            container.innerHTML = `
+                <div class="main-img-box">
+                    <img src="${product.image}" alt="${product.name}">
+                </div>
+                <div class="product-content">
+                    <h1 class="luxury-font">${product.name}</h1>
+                    <div class="price">${formatPrice(product.price)}</div>
+                    <p class="desc">${product.description || 'A timeless piece of luxury, handcrafted with the finest materials to provide both elegance and functionality. Perfect for the modern professional or as a primary statement piece for your wardrobe.'}</p>
+                    
+                    <div class="actions-bar">
+                        <button class="btn" onclick="addToCart(${product.id})">Add to Bag</button>
+                        <button class="fav-btn" style="width: 60px; height: 60px;" onclick="toggleFavorite(${product.id})">
+                            <i class="fa-regular fa-heart" style="font-size: 1.5rem;"></i>
+                        </button>
+                    </div>
+
+                    <div class="product-meta">
+                        <div class="meta-item"><strong>Category:</strong> ${product.category.toUpperCase()}</div>
+                        <div class="meta-item"><strong>Reference:</strong> #MV-${product.id}</div>
+                        <div class="meta-item"><strong>Availability:</strong> In Stock</div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

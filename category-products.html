@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Collection | Marquise Vault</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+
+    <!-- Sale Banner -->
+    <div id="sale-banner" class="sale-banner" style="display: none;">
+        <p><span id="sale-message"></span> | Ends In: <span id="countdown">--:--:--</span></p>
+    </div>
+
+    <!-- Navbar Container -->
+    <div id="navbar-placeholder"></div>
+
+    <main class="container">
+        <header style="margin-top: 80px; text-align: center; margin-bottom: 50px;">
+            <h1 class="section-title" id="page-title">Our Collection</h1>
+            <p id="page-subtitle"
+                style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Explore our exquisite range of luxury bags crafted for perfection.
+            </p>
+        </header>
+
+        <section class="featured-products">
+            <div id="products-grid" class="products-grid">
+                <!-- Populated by JS -->
+            </div>
+
+            <div id="no-products" style="display: none; text-align: center; padding: 100px 0;">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 4rem; color: #ddd; margin-bottom: 2rem;"></i>
+                <h2>No products found</h2>
+                <p style="color: var(--text-muted); margin-top: 1rem;">Try searching for something else or browse our
+                    categories.</p>
+                <a href="index.html#categories-section" class="btn" style="margin-top: 2rem;">Back to Categories</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Admin Button -->
+    <div id="admin-float" class="admin-float" style="display: none;">
+        <a href="admin/dashboard.html">
+            <i class="fa-solid fa-user-gear"></i>
+        </a>
+    </div>
+
+    <!-- Footer Container -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="js/database.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadComponent('#navbar-placeholder', 'js/components/navbar.html');
+            loadComponent('#footer-placeholder', 'js/components/footer.html');
+            renderCategoryPage();
+        });
+
+        function renderCategoryPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const catId = urlParams.get('cat');
+            const searchQuery = urlParams.get('search');
+
+            const products = getData('products') || [];
+            const categories = getData('categories') || [];
+            const grid = document.getElementById('products-grid');
+            const noProducts = document.getElementById('no-products');
+            const titleEl = document.getElementById('page-title');
+            const subtitleEl = document.getElementById('page-subtitle');
+
+            let filtered = products;
+
+            if (catId) {
+                const category = categories.find(c => c.id === catId);
+                if (category) {
+                    titleEl.textContent = category.name;
+                    subtitleEl.textContent = `Browsing all ${category.name} from our latest collection.`;
+                    filtered = products.filter(p => p.category === catId);
+                }
+            } else if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                titleEl.textContent = `Search: "${searchQuery}"`;
+                filtered = products.filter(p =>
+                    p.name.toLowerCase().includes(query) ||
+                    p.category.toLowerCase().includes(query) ||
+                    (p.desc && p.desc.toLowerCase().includes(query))
+                );
+                subtitleEl.textContent = `Found ${filtered.length} results for your search.`;
+            }
+
+            if (filtered.length === 0) {
+                grid.style.display = 'none';
+                noProducts.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noProducts.style.display = 'none';
+
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card">
+                    <div class="product-image-wrapper">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <div class="price">${formatPrice(product.price)}</div>
+                        <div class="product-actions">
+                            <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                            <button class="fav-btn" onclick="toggleFavorite(${product.id})">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <a href="product-details.html?id=${product.id}" class="btn-outline" style="padding: 10px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center;">Details</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+
+</html>

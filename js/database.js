@@ -59,7 +59,8 @@ const INITIAL_DATA = {
     layout: [
         { type: 'hero', active: true },
         { type: 'categories', active: true },
-        { type: 'featured', active: true }
+        { type: 'featured', active: true },
+        { type: 'category-products', active: true }
     ],
     settings: {
         currency: 'PKR',
@@ -68,5 +69,24 @@ const INITIAL_DATA = {
         saleEndTime: '2026-12-31T23:59:59'
     },
     cart: [],
-    favorites: []
+    favorites: [],
+    orders: [
+        {
+            id: '1001',
+            date: '2026-02-01T10:30:00Z',
+            total: 12500,
+            status: 'pending',
+            customer: {
+                name: 'Tariq Mehmood',
+                email: 'tariq@example.com',
+                phone: '0300 1234567',
+                address: 'Plot 45, Defense Phase 2',
+                city: 'Karachi',
+                zip: '75500'
+            },
+            items: [
+                { id: 1, name: 'Classic Leather Tote', price: 12500, quantity: 1 }
+            ]
+        }
+    ]
 };

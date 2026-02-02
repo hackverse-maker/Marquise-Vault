@@ -81,15 +81,66 @@ function formatPrice(amount) {
 }
 
 function initHomePage() {
-    initHeroSlider();
-    renderCategoriesSection();
-    renderFeaturedProducts();
-    renderCategoryProducts();
+    const layout = getData('layout') || [
+        { type: 'hero', active: true },
+        { type: 'categories', active: true },
+        { type: 'featured', active: true },
+        { type: 'category-products', active: true }
+    ];
+
+    const mainContent = document.getElementById('main-content');
+    if (!mainContent) return;
+
+    mainContent.innerHTML = ''; // Clear static sections
+
+    layout.forEach(item => {
+        if (!item.active) return;
+
+        const section = document.createElement('div');
+        section.id = `${item.type}-container`;
+        mainContent.appendChild(section);
+
+        switch (item.type) {
+            case 'hero':
+                renderHeroSection(section);
+                break;
+            case 'categories':
+                renderCategoriesSection(section);
+                break;
+            case 'featured':
+                renderFeaturedProducts(section);
+                break;
+            case 'category-products':
+                renderCategoryProducts(section);
+                break;
+        }
+    });
+
+    initHeroSlider(); // Re-init slider after rendering
+}
+
+function renderHeroSection(container) {
+    const heroData = getData('hero') || [];
+    container.innerHTML = `
+        <section class="hero" id="hero-section">
+            <div class="hero-wrapper">
+                <div class="hero-text">
+                    <h1>Luxury <br><span class="accent">Redefined</span></h1>
+                    <p>Discover our exclusive collection of premium bags handcrafted with passion and elegance.</p>
+                    <a href="category-products.html" class="btn" style="width: fit-content;">Shop Collection</a>
+                </div>
+                <div class="hero-image">
+                    <div class="slider-container">
+                        ${heroData.map((h, i) => `<img src="${h.image}" class="slide ${i === 0 ? 'active' : ''}" alt="">`).join('')}
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
 }
 
 // Global Category Products Rendering
-function renderCategoryProducts() {
-    const container = document.getElementById('category-products-sections');
+function renderCategoryProducts(container) {
     if (!container) return;
 
     const categories = getData('categories');
@@ -130,13 +181,12 @@ function renderCategoryProducts() {
 }
 
 // Category Section Logic
-function renderCategoriesSection() {
-    const section = document.getElementById('categories-section');
-    if (!section) return;
+function renderCategoriesSection(container) {
+    if (!container) return;
 
     const categories = getData('categories');
-    section.innerHTML = `
-        <div class="container">
+    container.innerHTML = `
+        <div class="container" style="padding: 100px 0;">
             <h1 class="section-title">Shop By Category</h1>
             <div class="category-grid">
                 ${categories.map(cat => `
@@ -179,31 +229,37 @@ function initHeroSlider() {
 }
 
 // Render Products from Database
-function renderFeaturedProducts() {
-    const grid = document.getElementById('featured-grid');
-    if (!grid) return;
+function renderFeaturedProducts(container) {
+    if (!container) return;
 
     const products = getData('products');
     const featured = products.filter(p => p.featured);
 
-    grid.innerHTML = featured.map(product => `
-        <div class="product-card">
-            <div class="product-image-wrapper">
-                <img src="${product.image}" alt="${product.name}">
+    container.innerHTML = `
+        <section class="featured-products container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="products-grid">
+                ${featured.map(product => `
+                    <div class="product-card">
+                        <div class="product-image-wrapper">
+                            <img src="${product.image}" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <div class="price">${formatPrice(product.price)}</div>
+                            <div class="product-actions">
+                                <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                                <button class="fav-btn" onclick="toggleFavorite(${product.id})">
+                                    <i class="fa-regular fa-heart"></i>
+                                </button>
+                                <a href="product-details.html?id=${product.id}" class="btn-outline" style="padding: 10px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center;">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
             </div>
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <div class="price">${formatPrice(product.price)}</div>
-                <div class="product-actions">
-                    <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
-                    <button class="fav-btn" onclick="toggleFavorite(${product.id})">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                    <a href="product-details.html?id=${product.id}" class="btn-outline" style="padding: 10px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center;">Details</a>
-                </div>
-            </div>
-        </div>
-    `).join('');
+        </section>
+    `;
 }
 
 // Badge Updates

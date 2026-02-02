@@ -27,7 +27,8 @@ Marquise Vault is a specialized online store for luxury bags. It features a mode
 - **Dynamic Categories**: Populated from the database with custom icons.
 - **Wishlist (Favorites)**: Persistent liking system to save desired items.
 - **Shopping Cart**: Real-time quantity management and subtotal calculation.
-- **Currency**: Fully optimized for **PKR (Rs.)** with localized formatting.
+- **Checkout**: Premium multi-section checkout page with localized forms.
+- **Currency**: Fully optimized for **PKR (Rs.)** with localized formatting across all pages (Storefront & Admin).
 
 ---
 
@@ -45,7 +46,8 @@ The Admin Portal is the "heart" of the website, allowing total control over prod
 1. **Dashboard**: High-level overview of store stats and **Sale Banner Settings** (Message, End Time, Toggle).
 2. **Product Management**: Add, Edit, or Delete products. Supports image uploads (Base64) and featured status.
 3. **Category Management**: Create and organize collections with unique icons and preview images.
-4. **Layout Editor**: Reorder homepage sections and toggle visibility of components.
+4. **Layout Editor**: Fully functional dynamic reordering. Drag/move sections (Hero, Categories, Featured, etc.) and toggle their visibility. Any section can now be duplicated or re-added using the "Add New Section" modal.
+5. **Order Management**: Track customer purchases in real-time. View customer shipping details, items ordered, and update order status (Pending, Shipped, Delivered).
 
 ---
 

@@ -197,7 +197,7 @@
                     <select id="p-cat" required></select>
                 </div>
                 <div class="form-group">
-                    <label>Price ($)</label>
+                    <label>Price (Rs.)</label>
                     <input type="number" id="p-price" required>
                 </div>
                 <div class="form-group">
@@ -237,7 +237,7 @@
                     <td><img src="${p.image}" alt=""></td>
                     <td>${p.name}</td>
                     <td>${p.category}</td>
-                    <td>$${p.price}</td>
+                    <td>${formatPrice(p.price)}</td>
                     <td>
                         <button class="btn-sm btn-outline" style="margin-right: 5px;" onclick="editProduct(${p.id})">Edit</button>
                         <button class="btn-sm btn-outline" style="color: red;" onclick="deleteProduct(${p.id})">Delete</button>
