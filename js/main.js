@@ -101,16 +101,16 @@ function initHomePage() {
 
         switch (item.type) {
             case 'hero':
-                renderHeroSection(section);
+                renderHeroSection(section, item);
                 break;
             case 'categories':
-                renderCategoriesSection(section);
+                renderCategoriesSection(section, item);
                 break;
             case 'featured':
-                renderFeaturedProducts(section);
+                renderFeaturedProducts(section, item);
                 break;
             case 'category-products':
-                renderCategoryProducts(section);
+                renderCategoryProducts(section, item);
                 break;
         }
     });
@@ -118,19 +118,24 @@ function initHomePage() {
     initHeroSlider(); // Re-init slider after rendering
 }
 
-function renderHeroSection(container) {
-    const heroData = getData('hero') || [];
+function renderHeroSection(container, config) {
+    const slides = config.slides || getData('hero') || [];
+    // Use config-specific titles if available, otherwise defaults
+    const mainTitle = config.title || 'Luxury';
+    const accentTitle = config.accent || 'Redefined';
+    const subtitle = config.subtitle || 'Discover our exclusive collection of premium bags handcrafted with passion and elegance.';
+
     container.innerHTML = `
         <section class="hero" id="hero-section">
             <div class="hero-wrapper">
                 <div class="hero-text">
-                    <h1>Luxury <br><span class="accent">Redefined</span></h1>
-                    <p>Discover our exclusive collection of premium bags handcrafted with passion and elegance.</p>
+                    <h1>${mainTitle} <br><span class="accent">${accentTitle}</span></h1>
+                    <p>${subtitle}</p>
                     <a href="category-products.html" class="btn" style="width: fit-content;">Shop Collection</a>
                 </div>
                 <div class="hero-image">
                     <div class="slider-container">
-                        ${heroData.map((h, i) => `<img src="${h.image}" class="slide ${i === 0 ? 'active' : ''}" alt="">`).join('')}
+                        ${slides.map((h, i) => `<img src="${h.image}" class="slide ${i === 0 ? 'active' : ''}" alt="">`).join('')}
                     </div>
                 </div>
             </div>
@@ -228,15 +233,16 @@ function initHeroSlider() {
 }
 
 // Render Products from Database
-function renderFeaturedProducts(container) {
+function renderFeaturedProducts(container, config) {
     if (!container) return;
 
     const products = getData('products');
     const featured = products.filter(p => p.featured);
+    const title = config.title || 'Featured Products';
 
     container.innerHTML = `
         <section class="featured-products container">
-            <h2 class="section-title">Featured Products</h2>
+            <h2 class="section-title">${title}</h2>
             <div class="products-grid">
                 ${featured.map(product => `
                     <div class="product-card">

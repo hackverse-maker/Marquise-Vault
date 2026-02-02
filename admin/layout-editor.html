@@ -118,6 +118,47 @@
             border-color: var(--accent-color);
             color: var(--accent-color);
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -175,6 +216,23 @@
         </div>
     </div>
 
+    <!-- Edit Section Modal -->
+    <div id="editSectionModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2 id="edit-modal-title" style="margin-bottom: 1.5rem;">Edit Section</h2>
+            <form id="edit-section-form">
+                <input type="hidden" id="edit-index">
+                <div id="edit-fields">
+                    <!-- Dynamic fields based on section type -->
+                </div>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="btn">Save Section</button>
+                    <button type="button" class="btn-outline" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="../js/database.js"></script>
     <script>
         // Session Check
@@ -191,19 +249,86 @@
                 <div class="layout-item">
                     <div class="layout-info">
                         <i class="fa-solid fa-grip-lines"></i>
-                        <h3>${item.type.replace('-', ' ').toUpperCase()} Section</h3>
+                        <h3>${item.type.replace('-', ' ').toUpperCase()} Section ${item.title ? `(${item.title})` : ''}</h3>
                     </div>
                     <div class="layout-controls">
-                        <button class="btn-icon" onclick="moveUp(${index})"><i class="fa-solid fa-arrow-up"></i></button>
-                        <button class="btn-icon" onclick="moveDown(${index})"><i class="fa-solid fa-arrow-down"></i></button>
-                        <button class="btn-icon ${item.active ? 'active' : ''}" onclick="toggleActive(${index})">
+                        <button class="btn-icon" title="Edit Content" onclick="editSection(${index})"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-icon" title="Move Up" onclick="moveUp(${index})"><i class="fa-solid fa-arrow-up"></i></button>
+                        <button class="btn-icon" title="Move Down" onclick="moveDown(${index})"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button class="btn-icon ${item.active ? 'active' : ''}" title="Toggle Visibility" onclick="toggleActive(${index})">
                             <i class="fa-solid ${item.active ? 'fa-eye' : 'fa-eye-slash'}"></i>
                         </button>
-                        <button class="btn-icon btn-delete" onclick="removeSection(${index})"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn-icon btn-delete" title="Remove" onclick="removeSection(${index})"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
+
+        window.editSection = (index) => {
+            const item = layout[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('edit-modal-title').textContent = `Edit ${item.type.toUpperCase()} Section`;
+            const fields = document.getElementById('edit-fields');
+            fields.innerHTML = '';
+
+            if (item.type === 'hero') {
+                const slides = item.slides || getData('hero') || [];
+                const imageUrls = slides.map(s => s.image).join('\n');
+                fields.innerHTML = `
+                    <div class="form-group">
+                        <label>Main Title (First half)</label>
+                        <input type="text" id="hero-title" value="${item.title || 'Luxury'}">
+                    </div>
+                    <div class="form-group">
+                        <label>Accent Title (Second half)</label>
+                        <input type="text" id="hero-accent" value="${item.accent || 'Redefined'}">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtitle / Description</label>
+                        <textarea id="hero-subtitle" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd; height: 60px;">${item.subtitle || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Slide Images (One URL per line)</label>
+                        <textarea id="hero-images" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd; height: 100px;">${imageUrls}</textarea>
+                    </div>
+                `;
+            } else if (item.type === 'featured') {
+                fields.innerHTML = `
+                    <div class="form-group">
+                        <label>Section Title</label>
+                        <input type="text" id="featured-title" value="${item.title || 'Featured Products'}">
+                    </div>
+                `;
+            } else {
+                fields.innerHTML = '<p style="color: var(--text-muted);">This section uses automatic data from categories and products.</p>';
+            }
+
+            document.getElementById('editSectionModal').style.display = 'flex';
+        };
+
+        window.closeEditModal = () => {
+            document.getElementById('editSectionModal').style.display = 'none';
+        };
+
+        document.getElementById('edit-section-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const index = document.getElementById('edit-index').value;
+            const item = layout[index];
+
+            if (item.type === 'hero') {
+                item.title = document.getElementById('hero-title').value;
+                item.accent = document.getElementById('hero-accent').value;
+                item.subtitle = document.getElementById('hero-subtitle').value;
+
+                const imageUrls = document.getElementById('hero-images').value.split('\n').filter(url => url.trim() !== '');
+                item.slides = imageUrls.map(url => ({ image: url.trim() }));
+            } else if (item.type === 'featured') {
+                item.title = document.getElementById('featured-title').value;
+            }
+
+            renderLayout();
+            closeEditModal();
+        });
 
         window.openAddModal = () => {
             document.getElementById('addSectionModal').style.display = 'flex';
@@ -217,6 +342,8 @@
             layout.push({ type, active: true });
             renderLayout();
             closeAddModal();
+            // Automatically open edit modal for the new section
+            editSection(layout.length - 1);
         };
 
         window.moveUp = (index) => {

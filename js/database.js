@@ -57,9 +57,27 @@ const INITIAL_DATA = {
         { image: 'img/hero (2).jpeg', title: 'Elegance Everywhere', subtitle: 'Bags that make a statement wherever you go.' }
     ],
     layout: [
-        { type: 'hero', active: true },
-        { type: 'featured', active: true },
-        { type: 'category-products', active: true }
+        {
+            type: 'hero',
+            active: true,
+            title: 'Luxury',
+            accent: 'Redefined',
+            subtitle: 'Discover our exclusive collection of premium bags handcrafted with passion and elegance.',
+            slides: [
+                { image: 'img/hero.jpeg' },
+                { image: 'img/hero (1).jpeg' },
+                { image: 'img/hero (2).jpeg' }
+            ]
+        },
+        {
+            type: 'featured',
+            active: true,
+            title: 'Featured Products'
+        },
+        {
+            type: 'category-products',
+            active: true
+        }
     ],
     settings: {
         currency: 'PKR',
