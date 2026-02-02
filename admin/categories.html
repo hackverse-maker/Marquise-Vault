@@ -27,6 +27,25 @@
         .admin-main {
             margin-left: 250px;
             padding: 40px;
+            transition: var(--transition);
+        }
+
+        /* Mobile Adjustments */
+        .admin-header-mobile {
+            display: none;
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+        }
+
+        .hamburger {
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
         .admin-logo {
@@ -146,12 +165,47 @@
             height: 100%;
             object-fit: cover;
         }
+
+        @media (max-width: 992px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            }
+
+            .admin-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .admin-header-mobile {
+                display: flex;
+            }
+
+            .cat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-main h1 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 
 <body style="background: #f4f6f9;">
 
-    <aside class="admin-sidebar">
+    <div class="admin-header-mobile">
+        <div class="admin-logo" style="margin-bottom: 0; font-size: 1.2rem;">Admin <span class="accent">Panel</span>
+        </div>
+        <div class="hamburger" id="mobile-toggle"><i class="fa-solid fa-bars"></i></div>
+    </div>
+
+    <aside class="admin-sidebar" id="sidebar">
         <div class="admin-logo">Admin <span class="accent">Panel</span></div>
         <ul class="admin-nav">
             <li><a href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
@@ -213,6 +267,18 @@
         const session = JSON.parse(localStorage.getItem('mv_auth_session'));
         if (!session || session.role !== 'admin') {
             window.location.href = 'login.html';
+        }
+
+        // Mobile Toggle Logic
+        const toggle = document.getElementById('mobile-toggle');
+        const sidebar = document.getElementById('sidebar');
+        if (toggle) {
+            toggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                const icon = toggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
         }
 
         let categories = getData('categories') || [];
