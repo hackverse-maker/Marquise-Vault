@@ -1,11 +1,12 @@
 :root {
-    --primary-color: #111111;
+    --primary-color: #1A1A1A;
     --secondary-color: #ffffff;
-    --accent-color: #D4AF37;
-    /* Gold */
+    --accent-color: #B4905A;
+    /* Logo Bronze/Gold */
     --text-color: #333333;
     --text-muted: #666666;
-    --bg-color: #f9f9f9;
+    --bg-color: #FDFBF7;
+    /* Logo Background */
     --footer-bg: #0a0a0a;
     --border-color: #eeeeee;
     --transition: 0.3s ease;
